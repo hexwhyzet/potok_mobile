@@ -125,7 +125,9 @@ class PictureViewerState extends State<PictureViewer> {
       physics: CustomPageViewScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemBuilder: (context, position) {
+        if ((position + 8) % 10 == 0) {
           return Ads();
+        }
         if (position == 0 && widget.storage.size() == 0) {
           return emptyPage;
         }

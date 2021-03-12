@@ -1,4 +1,4 @@
-package com.example.potok_mobile;
+package app.potok;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
-import com.example.potok_mobile.R;
+import app.potok.R;
 import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin.NativeAdFactory;
 import java.util.Map;
 

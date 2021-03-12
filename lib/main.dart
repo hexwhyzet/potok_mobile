@@ -50,9 +50,9 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               globals.subscriptionStorage = PictureViewerStorage(
-                  sourceUrl: config.subscriptionUrl + globals.sessionToken);
+                  sourceUrl: config.subscriptionUrl + globals.sessionToken, loadMoreNumber: 10);
               globals.feedStorage = PictureViewerStorage(
-                  sourceUrl: config.feedUrl + globals.sessionToken);
+                  sourceUrl: config.feedUrl + globals.sessionToken, loadMoreNumber: 10);
               globals.cacher = Cacher();
               return AppScreen();
             } else {
