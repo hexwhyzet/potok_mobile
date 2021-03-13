@@ -331,7 +331,6 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
           postRequest(suggestProfile, {"content": textController.text})
               .then((data) {
             if (data.status == "ok") {
-              print(1);
               Navigator.of(context).pop();
               successFlushbar("Suggestion sent")..show(context);
               setState(() {
