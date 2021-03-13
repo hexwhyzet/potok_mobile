@@ -9,6 +9,7 @@ import 'package:potok/globals.dart' as globals;
 import 'package:potok/models/actions_cacher.dart';
 import 'package:potok/models/storage.dart';
 import 'package:potok/requests/logging.dart';
+import 'package:potok/styles/constraints.dart';
 import 'package:potok/widgets/common/animations.dart';
 import 'package:potok/widgets/common/bottom_navigation.dart';
 
@@ -56,10 +57,13 @@ class MyApp extends StatelessWidget {
               globals.cacher = Cacher();
               return AppScreen();
             } else {
-              return Align(
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
+              return SafeArea(
+                top: false,
+                left: false,
+                right: false,
+                bottom: true,
+                child: Container(
+                  padding: EdgeInsets.only(bottom: ConstraintsHeights.navigationBarHeight),
                   child: StyledLoadingIndicator(color: Colors.white),
                 ),
               );

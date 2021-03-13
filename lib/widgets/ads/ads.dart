@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:potok/config.dart' as config;
-import 'package:potok/requests/logging.dart';
 import 'package:potok/widgets/common/animations.dart';
-
 
 String get unitId {
   if (Platform.isAndroid) {
@@ -16,14 +14,12 @@ String get unitId {
   }
 }
 
-class Ads extends StatefulWidget {
-
-
+class AdsWidget extends StatefulWidget {
   @override
-  _AdsState createState() => _AdsState();
+  _AdsWidgetState createState() => _AdsWidgetState();
 }
 
-class _AdsState extends State<Ads> {
+class _AdsWidgetState extends State<AdsWidget> {
   NativeAd myNative;
 
   @override
@@ -31,9 +27,7 @@ class _AdsState extends State<Ads> {
     myNative = NativeAd(
       adUnitId: 'ca-app-pub-3940256099942544/2247696110',
       factoryId: 'adFactoryExample',
-      request: AdRequest(
-          testDevices: ["210fa3a81f233e19a5f2e550c7f37160"]
-      ),
+      request: AdRequest(testDevices: ["210fa3a81f233e19a5f2e550c7f37160"]),
       listener: AdListener(),
     );
     super.initState();
@@ -47,26 +41,44 @@ class _AdsState extends State<Ads> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: myNative.load(),
-      builder: (context, snapshot) {
-        return Container(
-          alignment: Alignment.center,
-          width: 500,
-          height: 500,
-          child: AdWidget(ad: myNative),
-        );
-        if (snapshot.hasData) {
-          return Container(
-            alignment: Alignment.center,
-            width: 500,
-            height: 500,
-            child: AdWidget(ad: myNative),
-          );
-        } else {
-          return StyledLoadingIndicator(color: Colors.green);
-        }
-      },
+    return SafeArea(
+      left: false,
+      right: false,
+      top: false,
+      bottom: true,
+      child: FutureBuilder(
+        future: myNative.load(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              alignment: Alignment.center,
+              width: 500,
+              height: 500,
+              child: AdWidget(ad: myNative),
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Ads is loading",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontFamily: "Sofia",
+                    ),
+                  ),
+                  Container(
+                    height: 10,
+                  ),
+                  StyledLoadingIndicator(color: Colors.white),
+                ],
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -62,7 +62,7 @@ class ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+      contentPadding: EdgeInsets.fromLTRB(10, 3, 10, 0),
       onTap: () {
         Navigator.push(
           context,

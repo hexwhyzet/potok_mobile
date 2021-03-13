@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:potok/models/ads.dart';
 import 'package:potok/widgets/ads/ads.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:potok/globals.dart' as globals;
@@ -125,8 +126,8 @@ class PictureViewerState extends State<PictureViewer> {
       physics: CustomPageViewScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemBuilder: (context, position) {
-        if ((position + 8) % 10 == 0) {
-          return Ads();
+        if (widget.storage.getObject(position) is Ads) {
+          return AdsWidget();
         }
         if (position == 0 && widget.storage.size() == 0) {
           return emptyPage;
@@ -140,7 +141,9 @@ class PictureViewerState extends State<PictureViewer> {
       itemCount: max(widget.storage.size(), 1),
       onPageChanged: (int position) {
         widget.storage.updateLastPosition(position);
-        widget.storage.markAsSeen(position);
+        if (widget.storage.getObject(position) is Picture) {
+          widget.storage.markAsSeen(position);
+        }
         widget.storage.check().then((value) {
           if (value) setState(() {});
         });
@@ -155,9 +158,12 @@ class PictureViewerState extends State<PictureViewer> {
       future: widget.storage.addObjects(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.all(8),
+          return SafeArea(
+            top: false,
+            left: false,
+            right: false,
+            bottom: true,
+            child: Center(
               child: StyledLoadingIndicator(color: Colors.white),
             ),
           );

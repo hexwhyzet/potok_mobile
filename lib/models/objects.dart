@@ -1,4 +1,5 @@
 import 'package:potok/models/action.dart';
+import 'package:potok/models/ads.dart';
 import 'package:potok/models/comment.dart';
 import 'package:potok/models/picture.dart';
 import 'package:potok/models/profile.dart';
@@ -25,6 +26,10 @@ dynamic objectFromJson(Map<String, dynamic> json) {
     case "comment":
       {
         return Comment.fromJson(json);
+      }
+    case "ads":
+      {
+        return Ads.fromJson(json);
       }
   }
 }
