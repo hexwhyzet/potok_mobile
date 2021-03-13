@@ -35,6 +35,12 @@ class _SearchScreen extends State<SearchScreen> {
       appBar: AppBar(
         // backwardsCompatibility: false,
         // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.add_rounded, color: Colors.black, size: 33),
+          onPressed: () {
+            Navigator.push(context, createRoute(SuggestionWidget()));
+          },
+        ),
         toolbarHeight: ConstraintsHeights.appBarHeight,
         backgroundColor: theme.colors.appBarColor,
         elevation: constraintElevation,
@@ -325,6 +331,8 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
           postRequest(suggestProfile, {"content": textController.text})
               .then((data) {
             if (data.status == "ok") {
+              print(1);
+              Navigator.of(context).pop();
               successFlushbar("Suggestion sent")..show(context);
               setState(() {
                 this.isLoading = false;
@@ -347,9 +355,18 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: theme.colors.backgroundColor,
-      child: Column(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: BackArrowButton(),
+        toolbarHeight: ConstraintsHeights.appBarHeight,
+        backgroundColor: theme.colors.appBarColor,
+        elevation: constraintElevation,
+        centerTitle: true,
+        title: Text("suggest profile", style: theme.texts.profileScreenNameYours),
+      ),
+      backgroundColor: theme.colors.backgroundColor,
+      body: Column(
         children: [
           Expanded(
             flex: 4,

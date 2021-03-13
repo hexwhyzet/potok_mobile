@@ -585,6 +585,13 @@ class LightTexts {
     fontSize: 15,
     fontWeight: FontWeight.w500,
   );
+
+  TextStyle emptyActionsPage = TextStyle(
+    fontFamily: 'Sofia',
+    color: LIGHT_GREY,
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 class DarkTexts {

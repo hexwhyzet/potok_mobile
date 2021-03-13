@@ -42,17 +42,20 @@ class _PictureViewerScreenState extends State<PictureViewerScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      bottomNavigationBar: AddComment(
-        addCommentUrlProvider: () =>
-            widget.storage.getObject(widget.storage.lastPosition).addCommentUrl,
-        updateComments: () {
-          widget.storage.getObject(widget.storage.lastPosition).commentsNum +=
-              1;
-          setState(() {});
-        },
-        staticCommentSectionColor: theme.colors.pictureViewerCommentSection,
-        staticCommentSectionTextStyle: theme.texts.pictureViewerCommentSection,
-        dynamicCommentSectionTextStyle: theme.texts.yourCommentDark,
+      bottomNavigationBar: StyledAnimatedOpacity(
+        visible: globals.isVisibleInterface,
+        child: AddComment(
+          addCommentUrlProvider: () =>
+          widget.storage.getObject(widget.storage.lastPosition).addCommentUrl,
+          updateComments: () {
+            widget.storage.getObject(widget.storage.lastPosition).commentsNum +=
+            1;
+            setState(() {});
+          },
+          staticCommentSectionColor: theme.colors.pictureViewerCommentSection,
+          staticCommentSectionTextStyle: theme.texts.pictureViewerCommentSection,
+          dynamicCommentSectionTextStyle: theme.texts.yourCommentDark,
+        ),
       ),
       body: GestureDetector(
         child: PictureViewer(
@@ -94,28 +97,34 @@ class PictureViewerState extends State<PictureViewer> {
   PreloadPageController controller;
 
   Widget get emptyPage {
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: theme.texts.emptyPictureViewer,
-                children: [
-                  TextSpan(
-                    text: "You have no subscriptions, checkout tab\n\n",
-                  ),
-                  TextSpan(
-                    text: "for you",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
-                  ),
-                ],
+    return SafeArea(
+      top: false,
+      right: false,
+      left: false,
+      bottom: true,
+      child: Container(
+        padding: EdgeInsets.all(20),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: theme.texts.emptyPictureViewer,
+                  children: [
+                    TextSpan(
+                      text: "You have no subscriptions, checkout tab\n\n",
+                    ),
+                    TextSpan(
+                      text: "for you",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
