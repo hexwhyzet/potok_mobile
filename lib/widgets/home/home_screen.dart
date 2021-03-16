@@ -9,7 +9,7 @@ import 'package:potok/widgets/home/picture_viewer.dart';
 
 class HomeScreen extends StatefulWidget {
   final PictureViewerStorage subscriptionStorage;
-  final PictureViewerStorage feedStorage;
+  final TicketStorage feedStorage;
   final Function setStateBottomBar;
   final TrackerManager trackerManager;
 
@@ -53,11 +53,14 @@ class _HomeScreen extends State<HomeScreen>
   }
 
   void rebuildFeed() {
-    widget.feedStorage.rebuild().then((_) {
-      setState(() {
-        feedKey.currentState.controller.jumpTo(1);
+    globals.trackerManager.sendBack(threshold: 0).then((value) {
+      widget.feedStorage.rebuild().then((_) {
+        setState(() {
+          feedKey.currentState.controller.jumpTo(1);
+        });
       });
     });
+
     // feedKey.currentState.controller.jumpTo(0);
   }
 

@@ -125,3 +125,54 @@ class PictureViewerStorage extends Storage {
     lastPosition = newLastPosition;
   }
 }
+
+class TicketStorage extends Storage {
+  TicketStorage({
+    sourceUrl,
+    lastPosition = LAST_POSITION,
+    loadMoreNumber = LOAD_MORE_NUMBER,
+    isLoading = IS_LOADING,
+    hasMore = HAS_MORE,
+    deltaToReload = DELTA_TO_RELOAD,
+    offset = OFFSET,
+  }) : super(
+          sourceUrl: sourceUrl,
+          lastPosition: lastPosition,
+          loadMoreNumber: loadMoreNumber,
+          isLoading: isLoading,
+          hasMore: hasMore,
+          deltaToReload: deltaToReload,
+          offset: offset,
+        );
+
+  factory TicketStorage.fromStorage(Storage storage) {
+    TicketStorage ticketStorage = TicketStorage(
+      sourceUrl: storage.sourceUrl,
+      lastPosition: storage.lastPosition,
+      loadMoreNumber: storage.loadMoreNumber,
+      isLoading: storage.isLoading,
+      hasMore: storage.hasMore,
+      deltaToReload: storage.deltaToReload,
+      offset: storage.offset,
+    );
+    ticketStorage.objects = [...storage.objects];
+    return ticketStorage;
+  }
+
+  Future<bool> check() async {
+    if (!isLoading && (objects.length - lastPosition) <= deltaToReload) {
+      await addObjects();
+      return true;
+    }
+    return false;
+  }
+
+  void markAsSeen(int position) {
+    String url = "${config.markAsSeenUrl}/${getObject(position).picture.id}";
+    getRequest(url);
+  }
+
+  void updateLastPosition(int newLastPosition) {
+    lastPosition = newLastPosition;
+  }
+}

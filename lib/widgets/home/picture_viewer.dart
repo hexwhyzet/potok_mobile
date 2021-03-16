@@ -6,6 +6,7 @@ import 'package:potok/globals.dart';
 import 'package:potok/models/ads.dart';
 import 'package:potok/models/picture.dart';
 import 'package:potok/models/storage.dart';
+import 'package:potok/models/ticket.dart';
 import 'package:potok/models/tracker.dart';
 import 'package:potok/widgets/ads/ads.dart';
 import 'package:potok/widgets/common/animations.dart';
@@ -46,15 +47,17 @@ class _PictureViewerScreenState extends State<PictureViewerScreen> {
       bottomNavigationBar: StyledAnimatedOpacity(
         visible: globals.isVisibleInterface,
         child: AddComment(
-          addCommentUrlProvider: () =>
-          widget.storage.getObject(widget.storage.lastPosition).addCommentUrl,
+          addCommentUrlProvider: () => widget.storage
+              .getObject(widget.storage.lastPosition)
+              .addCommentUrl,
           updateComments: () {
             widget.storage.getObject(widget.storage.lastPosition).commentsNum +=
-            1;
+                1;
             setState(() {});
           },
           staticCommentSectionColor: theme.colors.pictureViewerCommentSection,
-          staticCommentSectionTextStyle: theme.texts.pictureViewerCommentSection,
+          staticCommentSectionTextStyle:
+              theme.texts.pictureViewerCommentSection,
           dynamicCommentSectionTextStyle: theme.texts.yourCommentDark,
         ),
       ),
@@ -79,7 +82,7 @@ class _PictureViewerScreenState extends State<PictureViewerScreen> {
 }
 
 class PictureViewer extends StatefulWidget {
-  final PictureViewerStorage storage;
+  final storage;
   final double bottomPadding;
   final bool showProfileAvatar;
   final TrackerManager trackerManager;
@@ -121,7 +124,8 @@ class PictureViewerState extends State<PictureViewer> {
                     ),
                     TextSpan(
                       text: "for you",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
                     ),
                   ],
                 ),
@@ -165,7 +169,8 @@ class PictureViewerState extends State<PictureViewer> {
           widget.trackerManager.updateView(position);
           widget.trackerManager.sendBack();
         }
-        if (widget.storage.getObject(position) is Picture) {
+        if (widget.storage.getObject(position) is Picture ||
+            widget.storage.getObject(position) is Ticket) {
           widget.storage.markAsSeen(position);
         }
         widget.storage.check().then((value) {

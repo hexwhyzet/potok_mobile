@@ -17,7 +17,7 @@ String authToken;
 
 PictureViewerStorage subscriptionStorage;
 
-PictureViewerStorage feedStorage;
+TicketStorage feedStorage;
 
 TrackerManager trackerManager;
 

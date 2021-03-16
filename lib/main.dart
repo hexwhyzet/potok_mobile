@@ -26,11 +26,25 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
   @override
   void dispose() {
-    globals.trackerManager.sendBack(threshold: 0);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      globals.trackerManager.sendBack(threshold: 0);
+    }
   }
 
   @override
@@ -66,7 +80,7 @@ class _MyAppState extends State<MyApp> {
                 sourceUrl: config.subscriptionUrl + globals.sessionToken,
                 loadMoreNumber: 10,
               );
-              globals.feedStorage = PictureViewerStorage(
+              globals.feedStorage = TicketStorage(
                 sourceUrl: config.tickets,
                 loadMoreNumber: 10,
               );
