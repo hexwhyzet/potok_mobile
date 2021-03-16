@@ -57,9 +57,10 @@ class _StyledLoadingIndicatorState extends State<StyledLoadingIndicator>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return SpinKitFadingFour(
+    return SpinKitRing(
       color: widget.color,
-      size: 28,
+      size: 30,
+      lineWidth: 3,
       duration: Duration(milliseconds: 600),
     );
   }

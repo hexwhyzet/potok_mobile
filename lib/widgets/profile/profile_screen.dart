@@ -572,6 +572,13 @@ class _PicturesGridState extends State<PicturesGrid>
             alignment: Alignment.center,
           ),
         );
+      } else {
+        return Center(
+          child: Text(
+            "No pictures yet",
+            style: theme.texts.searchEmptyQuery,
+          ),
+        );
       }
     } else {
       return NotificationListener<ScrollNotification>(
