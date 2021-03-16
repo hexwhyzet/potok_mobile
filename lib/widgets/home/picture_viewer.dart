@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:potok/models/ads.dart';
-import 'package:potok/widgets/ads/ads.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/globals.dart';
+import 'package:potok/models/ads.dart';
 import 'package:potok/models/picture.dart';
 import 'package:potok/models/storage.dart';
+import 'package:potok/models/tracker.dart';
+import 'package:potok/widgets/ads/ads.dart';
 import 'package:potok/widgets/common/animations.dart';
 import 'package:potok/widgets/common/navigator_push.dart';
 import 'package:potok/widgets/home/actions_toolbar.dart';
 import 'package:potok/widgets/home/custom_scroll_physics.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 class PictureViewerScreen extends StatefulWidget {
   final PictureViewerStorage storage;
@@ -81,12 +82,14 @@ class PictureViewer extends StatefulWidget {
   final PictureViewerStorage storage;
   final double bottomPadding;
   final bool showProfileAvatar;
+  final TrackerManager trackerManager;
 
   PictureViewer(
       {Key key,
       @required this.storage,
       this.bottomPadding = 0,
-      this.showProfileAvatar = true})
+      this.showProfileAvatar = true,
+      this.trackerManager})
       : super(key: key);
 
   @override
@@ -141,6 +144,14 @@ class PictureViewerState extends State<PictureViewer> {
         if (position == 0 && widget.storage.size() == 0) {
           return emptyPage;
         }
+        if (widget.trackerManager != null) {
+          return RequestedPicture(
+            picture: widget.storage.getObject(position).picture,
+            bottomPadding: widget.bottomPadding,
+            showProfileAvatar: widget.showProfileAvatar,
+            tracker: widget.trackerManager.getTracker(position),
+          );
+        }
         return RequestedPicture(
           picture: widget.storage.getObject(position),
           bottomPadding: widget.bottomPadding,
@@ -150,6 +161,10 @@ class PictureViewerState extends State<PictureViewer> {
       itemCount: max(widget.storage.size(), 1),
       onPageChanged: (int position) {
         widget.storage.updateLastPosition(position);
+        if (widget.trackerManager != null) {
+          widget.trackerManager.updateView(position);
+          widget.trackerManager.sendBack();
+        }
         if (widget.storage.getObject(position) is Picture) {
           widget.storage.markAsSeen(position);
         }
@@ -278,11 +293,13 @@ class RequestedPicture extends StatefulWidget {
   final Picture picture;
   final double bottomPadding;
   final bool showProfileAvatar;
+  final Tracker tracker;
 
   RequestedPicture({
     @required this.picture,
     this.bottomPadding = 0,
     this.showProfileAvatar = true,
+    this.tracker,
   });
 
   @override
@@ -328,9 +345,10 @@ class _RequestedPicture extends State<RequestedPicture> {
             StyledAnimatedOpacity(
               visible: globals.isVisibleInterface,
               child: ActionsToolbar(
-                widget.picture,
+                picture: widget.picture,
                 bottomPadding: 0,
                 showProfile: widget.showProfileAvatar,
+                tracker: widget.tracker,
               ),
             ),
           ],

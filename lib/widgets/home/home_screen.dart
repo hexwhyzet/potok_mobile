@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/globals.dart';
 import 'package:potok/models/storage.dart';
+import 'package:potok/models/tracker.dart';
 import 'package:potok/widgets/common/animations.dart';
 import 'package:potok/widgets/home/home_appbar.dart';
 import 'package:potok/widgets/home/picture_viewer.dart';
@@ -10,11 +11,13 @@ class HomeScreen extends StatefulWidget {
   final PictureViewerStorage subscriptionStorage;
   final PictureViewerStorage feedStorage;
   final Function setStateBottomBar;
+  final TrackerManager trackerManager;
 
   HomeScreen(
       {@required this.subscriptionStorage,
       @required this.feedStorage,
-      @required this.setStateBottomBar});
+      @required this.setStateBottomBar,
+      this.trackerManager});
 
   @override
   _HomeScreen createState() => _HomeScreen();
@@ -85,6 +88,7 @@ class _HomeScreen extends State<HomeScreen>
               key: feedKey,
               storage: widget.feedStorage,
               bottomPadding: 0,
+              trackerManager: widget.trackerManager,
             ),
           ],
         ),

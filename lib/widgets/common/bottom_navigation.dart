@@ -55,6 +55,7 @@ class _AppScreenState extends State<AppScreen> {
         subscriptionStorage: globals.subscriptionStorage,
         feedStorage: globals.feedStorage,
         setStateBottomBar: setStateBottomBar,
+        trackerManager: globals.trackerManager,
       ),
       SearchScreen(),
       UploadPictureScreen(),

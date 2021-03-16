@@ -13,6 +13,7 @@ import 'package:potok/models/picture.dart';
 import 'package:potok/models/profile.dart';
 import 'package:potok/models/response.dart';
 import 'package:potok/models/storage.dart';
+import 'package:potok/models/tracker.dart';
 import 'package:potok/styles/constraints.dart';
 import 'package:potok/widgets/common/actions_bottom_sheet.dart';
 import 'package:potok/widgets/common/animations.dart';
@@ -26,9 +27,14 @@ class ActionsToolbar extends StatefulWidget {
   final Picture picture;
   final bool showProfile;
   final double bottomPadding;
+  final Tracker tracker;
 
-  ActionsToolbar(this.picture,
-      {this.bottomPadding = 0, this.showProfile = true});
+  ActionsToolbar({
+    this.picture,
+    this.bottomPadding = 0,
+    this.showProfile = true,
+    this.tracker,
+  });
 
   @override
   _ActionsToolbarState createState() => _ActionsToolbarState();
@@ -74,13 +80,22 @@ class _ActionsToolbarState extends State<ActionsToolbar> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ProfilePicture(
-                          profile: widget.picture.profile,
-                          showProfile: this.widget.showProfile),
-                      LikeButton(picture: widget.picture, key: likeGlobalKey),
+                        profile: widget.picture.profile,
+                        showProfile: this.widget.showProfile,
+                      ),
+                      LikeButton(
+                        picture: widget.picture,
+                        key: likeGlobalKey,
+                        tracker: widget.tracker,
+                      ),
                       CommentButton(
-                          picture: widget.picture,
-                          actionsToolbarUpdater: actionsToolbarUpdater),
-                      ShareButton(picture: widget.picture),
+                        picture: widget.picture,
+                        actionsToolbarUpdater: actionsToolbarUpdater,
+                      ),
+                      ShareButton(
+                        picture: widget.picture,
+                        tracker: widget.tracker,
+                      ),
                       MoreButton(picture: widget.picture)
                     ],
                   ),
@@ -277,10 +292,12 @@ class _ProfilePicture extends State<ProfilePicture> {
 
 class LikeButton extends StatefulWidget {
   final Picture picture;
+  final Tracker tracker;
 
   LikeButton({
     Key key,
     this.picture,
+    this.tracker,
   }) : super(key: key);
 
   @override
@@ -315,6 +332,9 @@ class _LikeButton extends State<LikeButton> {
       this.isUnTouched = false;
       this.isLiked = !isLiked;
       globals.cacher.updateLike(widget.picture.id, this.isLiked);
+      if (widget.tracker != null) {
+        widget.tracker.updateLike(this.isLiked);
+      }
       animatorKey.triggerAnimation();
     });
   }
@@ -528,48 +548,48 @@ class _CommentSectionState extends State<CommentSection> {
                     ),
                   ),
                   Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  createRoute(
-                                    ProfileScreen(
-                                      profile: comment.profile,
-                                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                createRoute(
+                                  ProfileScreen(
+                                    profile: comment.profile,
                                   ),
-                                );
-                              },
-                              child: Text(comment.profile.screenName,
-                                  style: theme.texts.pictureViewerCommentAuthor),
+                                ),
+                              );
+                            },
+                            child: Text(comment.profile.screenName,
+                                style: theme.texts.pictureViewerCommentAuthor),
+                          ),
+                          Container(height: 8),
+                          RichText(
+                            text: TextSpan(
+                              style: theme.texts.pictureViewerCommentText,
+                              children: [
+                                TextSpan(
+                                  text: comment.text,
+                                ),
+                                TextSpan(
+                                  text: " " +
+                                      shortenTimeDelta(DateTime.now()
+                                                  .millisecondsSinceEpoch ~/
+                                              1000 -
+                                          comment.date),
+                                  style: theme.texts.pictureViewerCommentDate,
+                                ),
+                              ],
                             ),
-                            Container(height: 8),
-                            RichText(
-                              text: TextSpan(
-                                style: theme.texts.pictureViewerCommentText,
-                                children: [
-                                  TextSpan(
-                                    text: comment.text,
-                                  ),
-                                  TextSpan(
-                                    text: " " +
-                                        shortenTimeDelta(
-                                            DateTime.now().millisecondsSinceEpoch ~/
-                                                1000 -
-                                                comment.date),
-                                    style: theme.texts.pictureViewerCommentDate,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -579,7 +599,7 @@ class _CommentSectionState extends State<CommentSection> {
                           getRequest(comment.likeUrl).then((value) {
                             animatorKey.triggerAnimation();
                             setState(
-                                  () {
+                              () {
                                 if (comment.isLiked) {
                                   comment.likesNum -= 1;
                                 } else {
@@ -605,7 +625,8 @@ class _CommentSectionState extends State<CommentSection> {
                             if (comment.likesNum != 0)
                               Text(
                                 shortenNum(comment.likesNum),
-                                style: theme.texts.pictureViewerCommentHeartLabel,
+                                style:
+                                    theme.texts.pictureViewerCommentHeartLabel,
                               )
                           ],
                         ),
@@ -773,10 +794,7 @@ class _AddCommentState extends State<AddComment> {
       child: Container(
         decoration: BoxDecoration(
           color: widget.staticCommentSectionColor,
-          border: Border(
-              top: BorderSide(
-                  color: Colors.grey,
-                  width: 0.1)),
+          border: Border(top: BorderSide(color: Colors.grey, width: 0.1)),
         ),
         child: SafeArea(
           bottom: true,
@@ -839,9 +857,11 @@ class _AddCommentState extends State<AddComment> {
 
 class ShareButton extends StatelessWidget {
   final Picture picture;
+  final Tracker tracker;
+
   AnimatorKey<double> animatorKey = AnimatorKey<double>();
 
-  ShareButton({this.picture});
+  ShareButton({this.picture, this.tracker});
 
   @override
   Widget build(BuildContext context) {
@@ -852,6 +872,9 @@ class ShareButton extends StatelessWidget {
           if (response.status == "ok") {
             Clipboard.setData(
                 new ClipboardData(text: response.jsonContent["share_url"]));
+            if (tracker != null) {
+              tracker.updateShare();
+            }
             successFlushbar("Share link copied")..show(context);
           } else {
             errorFlushbar("Failed to get a link")..show(context);

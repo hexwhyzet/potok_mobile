@@ -8,6 +8,7 @@ import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/models/actions_cacher.dart';
 import 'package:potok/models/storage.dart';
+import 'package:potok/models/tracker.dart';
 import 'package:potok/requests/logging.dart';
 import 'package:potok/styles/constraints.dart';
 import 'package:potok/widgets/common/animations.dart';
@@ -20,7 +21,18 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    globals.trackerManager.sendBack(threshold: 0);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -51,9 +63,16 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               globals.subscriptionStorage = PictureViewerStorage(
-                  sourceUrl: config.subscriptionUrl + globals.sessionToken, loadMoreNumber: 10);
+                sourceUrl: config.subscriptionUrl + globals.sessionToken,
+                loadMoreNumber: 10,
+              );
               globals.feedStorage = PictureViewerStorage(
-                  sourceUrl: config.feedUrl + globals.sessionToken, loadMoreNumber: 10);
+                sourceUrl: config.tickets,
+                loadMoreNumber: 10,
+              );
+              globals.trackerManager = TrackerManager(
+                ticketStorage: globals.feedStorage,
+              );
               globals.cacher = Cacher();
               return AppScreen();
             } else {
@@ -63,7 +82,8 @@ class MyApp extends StatelessWidget {
                 right: false,
                 bottom: true,
                 child: Container(
-                  padding: EdgeInsets.only(bottom: ConstraintsHeights.navigationBarHeight),
+                  padding: EdgeInsets.only(
+                      bottom: ConstraintsHeights.navigationBarHeight),
                   child: StyledLoadingIndicator(color: Colors.white),
                 ),
               );

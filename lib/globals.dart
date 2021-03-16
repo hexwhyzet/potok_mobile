@@ -2,6 +2,7 @@ library void_mobile_app.globals;
 
 import 'package:potok/models/actions_cacher.dart';
 import 'package:potok/models/storage.dart';
+import 'package:potok/models/tracker.dart';
 import 'package:potok/styles/themes.dart';
 
 bool isVisibleInterface = true;
@@ -17,6 +18,8 @@ String authToken;
 PictureViewerStorage subscriptionStorage;
 
 PictureViewerStorage feedStorage;
+
+TrackerManager trackerManager;
 
 Cacher cacher;
 
