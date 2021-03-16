@@ -349,14 +349,14 @@ class LightTexts {
   TextStyle profileScreenName = TextStyle(
     fontFamily: 'Sofia',
     color: BLACK,
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: FontWeight.w600,
   );
 
   TextStyle profileScreenNameYours = TextStyle(
     fontFamily: 'Sofia',
     color: BLACK,
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: FontWeight.w600,
   );
 

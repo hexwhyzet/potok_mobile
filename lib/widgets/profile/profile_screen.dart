@@ -72,7 +72,6 @@ class _ProfileScreen extends State<ProfileScreen>
   @override
   bool get wantKeepAlive => true;
 
-  ScrollController _scrollController;
   GlobalKey<_PicturesGridState> globalKey1 = GlobalKey();
   GlobalKey<_PicturesGridState> globalKey2 = GlobalKey();
   bool isSubscribed;
@@ -81,35 +80,10 @@ class _ProfileScreen extends State<ProfileScreen>
   @override
   void initState() {
     super.initState();
-    this._scrollController = ScrollController(
-      initialScrollOffset: 0,
-      keepScrollOffset: true,
-    );
-    this._scrollController.addListener(_scrollListener);
     this.isSubscribed =
         cacher.checkSub(widget.profile.id, widget.profile.isSubscribed);
     this._tabController =
         TabController(initialIndex: 0, length: 2, vsync: this);
-  }
-
-  _scrollListener() {
-    if (this._tabController.index == 0 && globalKey1.currentState != null) {
-      if (globalKey1.currentState.storage.hasMore &&
-          !globalKey1.currentState.storage.isLoading &&
-          _scrollController.position.extentAfter < 300) {
-        globalKey1.currentState.storage
-            .addObjects()
-            .then((value) => globalKey1.currentState.setState(() {}));
-      }
-    } else if (globalKey2.currentState != null) {
-      if (globalKey2.currentState.storage.hasMore &&
-          !globalKey2.currentState.storage.isLoading &&
-          _scrollController.position.extentAfter < 300) {
-        globalKey2.currentState.storage
-            .addObjects()
-            .then((value) => globalKey2.currentState.setState(() {}));
-      }
-    }
   }
 
   Widget getStats(label, value) {
@@ -497,7 +471,6 @@ class _ProfileScreen extends State<ProfileScreen>
       backgroundColor: theme.colors.appBarColor,
       appBar: profileAppBar(),
       body: NestedScrollView(
-        controller: _scrollController,
         headerSliverBuilder: (context, value) {
           return [
             SliverToBoxAdapter(
@@ -601,118 +574,126 @@ class _PicturesGridState extends State<PicturesGrid>
         );
       }
     } else {
-      return GridView.builder(
-        itemCount: storage.size(),
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-        itemBuilder: (context, index) {
-          if (index == storage.size()) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child:
-                    StyledLoadingIndicator(color: theme.colors.secondaryColor),
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && storage.hasMore && !storage.isLoading) {
+            storage.addObjects().then((value) => setState(() {}));
+          }
+          return false;
+        },
+        child: GridView.builder(
+          itemCount: storage.size(),
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          itemBuilder: (context, index) {
+            if (index == storage.size()) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child:
+                  StyledLoadingIndicator(color: theme.colors.secondaryColor),
+                ),
+              );
+            }
+            final Picture picture = storage.getObject(index);
+            return GestureDetector(
+              onTap: () {
+                storage.lastPosition = index;
+                Navigator.push(
+                  context,
+                  createRoute(
+                    PictureViewerScreen(
+                      storage: PictureViewerStorage.fromStorage(storage),
+                      showProfileAvatar: false,
+                    ),
+                  ),
+                ).then((value) => setState(() {}));
+              },
+              onLongPress: () {
+                if (!picture.canBeDeleted) return;
+                var isLoading = false;
+                showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BottomActionsSheet(bottomActionsListTiles: [
+                      constructListTile(
+                        "Delete picture",
+                        Icon(Icons.delete_outline_rounded,
+                            color: theme.colors.attentionColor, size: 27),
+                            () {
+                          if (isLoading) return;
+                          isLoading = true;
+                          getRequest(storage.getObject(index).deleteUrl).then(
+                                (response) async {
+                              if (response.status == "ok") {
+                                await storage
+                                    .rebuild()
+                                    .then((value) => setState(() {}));
+                                Navigator.pop(context);
+                                successFlushbar("Picture deleted")..show(context);
+                              } else {
+                                errorFlushbar("Failed to delete picture")
+                                  ..show(context);
+                                isLoading = false;
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ]);
+                  },
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.all(1),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(
+                      color: theme.colors.profileEmptyPicture,
+                    ),
+                    StyledFadeInImageNetwork(
+                      fit: BoxFit.cover,
+                      image: picture.lowResUrl,
+                    ),
+                    VerticalGradientShadow(
+                      height: 30,
+                      alignment: Alignment.bottomCenter,
+                      upperColor: Colors.transparent,
+                      lowerColor: Color.fromRGBO(40, 40, 40, 0.4),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(4),
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        children: [
+                          IconTheme(
+                            data: IconThemeData(
+                              size: 17,
+                              color: Colors.white,
+                            ),
+                            child: Icon(Icons.remove_red_eye),
+                          ),
+                          Container(
+                            height: 0,
+                            width: 4,
+                          ),
+                          Text(
+                            picture.viewsNum.toString(),
+                            style: theme.texts.profilePictureViews,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
-          }
-          final Picture picture = storage.getObject(index);
-          return GestureDetector(
-            onTap: () {
-              storage.lastPosition = index;
-              Navigator.push(
-                context,
-                createRoute(
-                  PictureViewerScreen(
-                    storage: PictureViewerStorage.fromStorage(storage),
-                    showProfileAvatar: false,
-                  ),
-                ),
-              ).then((value) => setState(() {}));
-            },
-            onLongPress: () {
-              if (!picture.canBeDeleted) return;
-              var isLoading = false;
-              showModalBottomSheet(
-                backgroundColor: Colors.transparent,
-                context: context,
-                builder: (BuildContext context) {
-                  return BottomActionsSheet(bottomActionsListTiles: [
-                    constructListTile(
-                      "Delete picture",
-                      Icon(Icons.delete_outline_rounded,
-                          color: theme.colors.attentionColor, size: 27),
-                      () {
-                        if (isLoading) return;
-                        isLoading = true;
-                        getRequest(storage.getObject(index).deleteUrl).then(
-                          (response) async {
-                            if (response.status == "ok") {
-                              await storage
-                                  .rebuild()
-                                  .then((value) => setState(() {}));
-                              Navigator.pop(context);
-                              successFlushbar("Picture deleted")..show(context);
-                            } else {
-                              errorFlushbar("Failed to delete picture")
-                                ..show(context);
-                              isLoading = false;
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ]);
-                },
-              );
-            },
-            child: Container(
-              margin: EdgeInsets.all(1),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Container(
-                    color: theme.colors.profileEmptyPicture,
-                  ),
-                  StyledFadeInImageNetwork(
-                    fit: BoxFit.cover,
-                    image: picture.lowResUrl,
-                  ),
-                  VerticalGradientShadow(
-                    height: 30,
-                    alignment: Alignment.bottomCenter,
-                    upperColor: Colors.transparent,
-                    lowerColor: Color.fromRGBO(40, 40, 40, 0.4),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(4),
-                    alignment: Alignment.bottomRight,
-                    child: Row(
-                      children: [
-                        IconTheme(
-                          data: IconThemeData(
-                            size: 17,
-                            color: Colors.white,
-                          ),
-                          child: Icon(Icons.remove_red_eye),
-                        ),
-                        Container(
-                          height: 0,
-                          width: 4,
-                        ),
-                        Text(
-                          picture.viewsNum.toString(),
-                          style: theme.texts.profilePictureViews,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+          },
+        ),
       );
     }
     return Container(); // Do not delete - solution for empty profile
