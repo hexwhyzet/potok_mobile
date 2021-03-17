@@ -111,35 +111,35 @@ class _AppScreenState extends State<AppScreen> {
                       BottomNavigationBarItem(
                         icon: TapAnimation(
                           animatorKey: homeAnimatorKey,
-                          child: Icon(AppIcons.home, size: 39),
+                          child: Icon(AppIcons.home, size: 38),
                         ),
                         label: 'Home',
                       ),
                       BottomNavigationBarItem(
                         icon: TapAnimation(
                           animatorKey: searchAnimatorKey,
-                          child: Icon(AppIcons.search, size: 39),
+                          child: Icon(AppIcons.search, size: 38),
                         ),
                         label: 'Search',
                       ),
                       BottomNavigationBarItem(
                         icon: TapAnimation(
                           animatorKey: uploadAnimatorKey,
-                          child: Icon(Icons.add_rounded, size: 41),
+                          child: Icon(Icons.add_rounded, size: 38),
                         ),
                         label: 'Upload',
                       ),
                       BottomNavigationBarItem(
                         icon: TapAnimation(
                           animatorKey: inboxAnimatorKey,
-                          child: Icon(AppIcons.inbox, size: 39),
+                          child: Icon(AppIcons.inbox, size: 38),
                         ),
                         label: 'Inbox',
                       ),
                       BottomNavigationBarItem(
                         icon: TapAnimation(
                           animatorKey: profileAnimatorKey,
-                          child: Icon(AppIcons.profile, size: 39),
+                          child: Icon(AppIcons.profile, size: 38),
                         ),
                         label: 'Profile',
                       ),

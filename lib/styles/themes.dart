@@ -184,7 +184,7 @@ class LightTexts {
   TextStyle header = TextStyle(
     fontFamily: "Sofia",
     color: Colors.black,
-    fontSize: 19,
+    fontSize: 18,
     height: 1.3,
     fontWeight: FontWeight.w600,
   );
@@ -192,7 +192,7 @@ class LightTexts {
   TextStyle body = TextStyle(
     fontFamily: "Sofia",
     color: GREY,
-    fontSize: 17,
+    fontSize: 16,
     height: 1.3,
     fontWeight: FontWeight.w500,
   );
@@ -501,14 +501,14 @@ class LightTexts {
     fontFamily: 'Sofia',
     color: BLACK,
     fontSize: 17,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
   );
 
   TextStyle profilePrivacyMessageText = TextStyle(
     fontFamily: 'Sofia',
     color: GREY,
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
   );
 
   TextStyle searchHint = TextStyle(

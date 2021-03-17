@@ -371,8 +371,10 @@ class _ProfileScreen extends State<ProfileScreen>
   Widget gapDescription(int tabNum) {
     if (widget.profile.isUserBlockedByYou) {
       return Container(
-        padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
+        padding: EdgeInsets.only(bottom: 50),
+        alignment: Alignment.center,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text("The User is blocked by you",
                 style: theme.texts.profilePrivacyMessageHeader),
@@ -384,8 +386,10 @@ class _ProfileScreen extends State<ProfileScreen>
       );
     } else if (widget.profile.areYouBlockedByUser) {
       return Container(
-        padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
+        padding: EdgeInsets.only(bottom: 50),
+        alignment: Alignment.center,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text("The User blocked by you",
                 style: theme.texts.profilePrivacyMessageHeader),
@@ -397,8 +401,10 @@ class _ProfileScreen extends State<ProfileScreen>
       );
     } else if (!widget.profile.isProfileAvailable && !widget.profile.isPublic) {
       return Container(
-        padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
+        padding: EdgeInsets.only(bottom: 50),
+        alignment: Alignment.center,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text("This account is private",
                 style: theme.texts.profilePrivacyMessageHeader),
@@ -410,8 +416,10 @@ class _ProfileScreen extends State<ProfileScreen>
       );
     } else if (!widget.profile.areLikedPicturesAvailable) {
       return Container(
-        padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
+        padding: EdgeInsets.only(bottom: 50),
+        alignment: Alignment.center,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text("The User closed access to its liked pictures",
                 style: theme.texts.profilePrivacyMessageHeader),
@@ -423,8 +431,10 @@ class _ProfileScreen extends State<ProfileScreen>
       );
     } else {
       return Container(
-        padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
+        padding: EdgeInsets.only(bottom: 50),
+        alignment: Alignment.center,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text("Sorry some error occured",
                 style: theme.texts.profilePrivacyMessageHeader),

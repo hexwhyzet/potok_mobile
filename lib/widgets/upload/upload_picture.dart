@@ -289,7 +289,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                                       width: 2),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                contentPadding: EdgeInsets.all(15),
+                                contentPadding: EdgeInsets.all(12),
                               ),
                             ),
                           ],

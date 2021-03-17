@@ -79,25 +79,29 @@ class ProfileTile extends StatelessWidget {
           ),
         );
       },
-      title: Row(
-        children: [
-          CustomCircleAvatar(profile: profile, radius: 30),
-          Container(height: 0, width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(profile.screenName,
-                    style: theme.texts.searchProfileScreenName),
-                Text(profile.name, style: theme.texts.searchProfileName),
-                Text(
-                    "${shortenNum(profile.followersNum)} followers ${shortenNum(profile.likesNum)} likes",
-                    style: theme.texts.searchProfileStats),
-              ],
+      title: Container(
+        height: 60,
+        child: Row(
+          children: [
+            CustomCircleAvatar(profile: profile, radius: 30),
+            Container(height: 0, width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(profile.screenName,
+                      style: theme.texts.searchProfileScreenName),
+                  Text(profile.name, style: theme.texts.searchProfileName),
+                  Text(
+                      "${shortenNum(profile.followersNum)} followers ${shortenNum(profile.likesNum)} likes",
+                      style: theme.texts.searchProfileStats),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -422,7 +426,7 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
                               width: 2),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: EdgeInsets.all(15),
+                        contentPadding: EdgeInsets.all(12),
                       ),
                     ),
                   ],
