@@ -1,5 +1,5 @@
 abstract class ConstraintsHeights {
-  static const double appBarHeight = 55;
+  static const double appBarHeight = 56;
   static const double navigationBarHeight = 50;
 }
 
