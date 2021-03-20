@@ -30,7 +30,7 @@ dependencies:
       ref: "fix-null-check-operators"
   pull_to_refresh: ^1.6.4
   image_picker: ^0.6.7+22
-  file_picker: ^2.0.13
+  file_picker: ^2.1.7
   platform_device_id: ^0.1.3
   flutter_launcher_icons: ^0.8.1
   cupertino_back_gesture: ^0.0.4+1
