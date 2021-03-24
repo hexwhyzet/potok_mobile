@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:potok/globals.dart';
+import 'package:potok/globals.dart' as globals;
+import 'package:potok/widgets/registration/registration.dart';
+
 
 class HomeAppBar extends StatefulWidget with PreferredSizeWidget {
   final Function rebuildSubscription;
@@ -43,14 +45,19 @@ class _HomeAppBarState extends State<HomeAppBar> {
               } else {
                 widget.rebuildFeed();
               }
+            } else {
+              if (index == 0 && !globals.isLogged) {
+                showAuthenticationScreen(context);
+                widget._tabController.index = 1;
+              }
             }
           },
           labelPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           indicator: BoxDecoration(),
-          labelStyle: theme.texts.homeScreenAppBarSelected,
-          labelColor: theme.texts.homeScreenAppBarSelected.color,
-          unselectedLabelStyle: theme.texts.homeScreenAppBarUnSelected,
-          unselectedLabelColor: theme.texts.homeScreenAppBarUnSelected.color,
+          labelStyle: globals.theme.texts.homeScreenAppBarSelected,
+          labelColor: globals.theme.texts.homeScreenAppBarSelected.color,
+          unselectedLabelStyle: globals.theme.texts.homeScreenAppBarUnSelected,
+          unselectedLabelColor: globals.theme.texts.homeScreenAppBarUnSelected.color,
           tabs: <Widget>[
             Container(
               alignment: Alignment.centerRight,

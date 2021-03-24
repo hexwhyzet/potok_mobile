@@ -48,6 +48,6 @@ List<dynamic> objectsFromJson(List<dynamic> list) {
 }
 
 Future<List<dynamic>> fetchObjects(String url) async {
-  final response = await getRequest(url);
+  final response = await getRequest(url: url);
   return objectsFromJson(response.jsonContent);
 }

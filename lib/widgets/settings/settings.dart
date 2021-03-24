@@ -107,7 +107,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   FilePickerResult result;
 
   void reloadProfile() async {
-    getRequest(widget.profile.reloadUrl).then((response) {
+    getRequest(url: widget.profile.reloadUrl).then((response) {
       widget.profile = objectFromJson(response.jsonContent);
       setState(() {});
     });
@@ -135,13 +135,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         child: TextField(
           textInputAction: TextInputAction.send,
           onEditingComplete: () {
-            getRequest("${config.changeName}/${textController.text}")
+            getRequest(url: "${config.changeName}/${textController.text}")
                 .then((response) {
-              if (response.status == "ok") {
+              if (response.status == 200) {
                 Navigator.pop(context);
                 successFlushbar("Name is changed")..show(context);
               } else {
-                errorFlushbar(response.status)..show(context);
+                errorFlushbar(response.detail)..show(context);
               }
             });
           },
@@ -199,13 +199,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         child: TextField(
           textInputAction: TextInputAction.send,
           onEditingComplete: () {
-            getRequest("${config.changeUsername}/${textController.text}")
+            getRequest(url: "${config.changeUsername}/${textController.text}")
                 .then((response) {
-              if (response.status == "ok") {
+              if (response.status == 200) {
                 Navigator.pop(context);
                 successFlushbar("Username is changed")..show(context);
               } else {
-                errorFlushbar(response.status)..show(context);
+                errorFlushbar(response.detail)..show(context);
               }
             });
           },
@@ -291,10 +291,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 
   Future<Response> sendPicture() async {
     String base64Picture = base64Encode(picture.readAsBytesSync());
-    final Response response = await postRequest(config.uploadAvatarUrl, {
-      "avatar": base64Picture,
-      "extension": picture.path.split(".").last,
-    });
+    final Response response = await postRequest(
+      url: config.uploadAvatarUrl,
+      body: {
+        "avatar": base64Picture,
+        "extension": picture.path.split(".").last,
+      },
+    );
     return response;
   }
 
@@ -439,7 +442,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             Navigator.push(
               context,
               createRoute(
-                ChangeProfilePublicity(profile: widget.profile, reloadProfile: reloadProfile),
+                ChangeProfilePublicity(
+                    profile: widget.profile, reloadProfile: reloadProfile),
               ),
             );
           }),
@@ -447,11 +451,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             Navigator.push(
               context,
               createRoute(
-                ChangeProfilePublicity(profile: widget.profile, reloadProfile: reloadProfile, likedPictures: true),
+                ChangeProfilePublicity(
+                    profile: widget.profile,
+                    reloadProfile: reloadProfile,
+                    likedPictures: true),
               ),
             );
           }),
-
         ],
       ),
     );
@@ -478,7 +484,7 @@ Widget get filledCheckBox {
       borderRadius: BorderRadius.circular(8),
     ),
     child: Icon(
-      Icons.check,
+      Icons.check_rounded,
       color: Colors.white,
       size: 11,
     ),
@@ -490,7 +496,8 @@ class ChangeProfilePublicity extends StatefulWidget {
   Function reloadProfile;
   bool likedPictures;
 
-  ChangeProfilePublicity({this.profile, this.reloadProfile, this.likedPictures=false});
+  ChangeProfilePublicity(
+      {this.profile, this.reloadProfile, this.likedPictures = false});
 
   @override
   _ChangeProfilePublicityState createState() => _ChangeProfilePublicityState();
@@ -501,7 +508,9 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
 
   @override
   void initState() {
-    isPublic = widget.likedPictures ? widget.profile.areLikedPicturesPublic : widget.profile.isPublic;
+    isPublic = widget.likedPictures
+        ? widget.profile.areLikedPicturesPublic
+        : widget.profile.isPublic;
   }
 
   bool doesHaveChanges() {
@@ -524,7 +533,9 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
         centerTitle: true,
         title: Container(
           child: Text(
-            widget.likedPictures ? "liked pictures publicity" : "profile publicity",
+            widget.likedPictures
+                ? "liked pictures publicity"
+                : "profile publicity",
             style: theme.texts.appBarSettings,
           ),
         ),
@@ -552,7 +563,9 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
                     children: [
                       Container(
                         child: Text(
-                          widget.likedPictures ? "Public liked pictures" : "Public profile",
+                          widget.likedPictures
+                              ? "Public liked pictures"
+                              : "Public profile",
                           style: theme.texts.settingsTile,
                         ),
                       ),
@@ -575,7 +588,9 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
                     children: [
                       Container(
                         child: Text(
-                          widget.likedPictures ? "Private liked pictures" : "Private profile",
+                          widget.likedPictures
+                              ? "Private liked pictures"
+                              : "Private profile",
                           style: theme.texts.settingsTile,
                         ),
                       ),
@@ -592,23 +607,33 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
                       if (doesHaveChanges()) {
                         return;
                       }
-                      getRequest((widget.likedPictures ? config.settingChangeAreLikedPicturesPublic : config.settingChangeIsPublic) + "/" + (isPublic ? "1" : "0")).then((response) {
-                        if (response.status == "ok") {
+                      getRequest(
+                              url: (widget.likedPictures
+                                      ? config
+                                          .settingChangeAreLikedPicturesPublic
+                                      : config.settingChangeIsPublic) +
+                                  "/" +
+                                  (isPublic ? "1" : "0"))
+                          .then((response) {
+                        if (response.status == 200) {
                           widget.reloadProfile();
                           Navigator.of(context).pop();
-                          successFlushbar("Publicity is changed")..show(context);
+                          successFlushbar("Publicity is changed")
+                            ..show(context);
                         } else {
-                          errorFlushbar(response.status)..show(context);
+                          errorFlushbar(response.detail)..show(context);
                         }
                       });
                     },
                     style: TextButton.styleFrom(
                       splashFactory: NoSplash.splashFactory,
                       minimumSize: Size(double.infinity, 45),
-                      backgroundColor: (doesHaveChanges()) ? Colors.grey.shade300 : theme.colors.secondaryColor,
+                      backgroundColor: (doesHaveChanges())
+                          ? Colors.grey.shade300
+                          : theme.colors.secondaryColor,
                     ),
                     child: Text(
-                        "Save",
+                      "Save",
                       style: TextStyle(
                         fontSize: 17,
                         color: Colors.white,

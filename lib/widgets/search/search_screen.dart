@@ -120,13 +120,13 @@ class DataSearch extends SearchDelegate<String> {
 
   Future<Response> requestSuggestionList(query) async {
     Response response =
-        await getRequest("$autoFill/$query/$SUGGESTIONS_NUMBER/0");
+        await getRequest(url: "$autoFill/$query/$SUGGESTIONS_NUMBER/0");
     return response;
   }
 
   Future<Response> requestResultList(query) async {
     Response response =
-        await getRequest("$search/$query/$SUGGESTIONS_NUMBER/0");
+        await getRequest(url: "$search/$query/$SUGGESTIONS_NUMBER/0");
     return response;
   }
 
@@ -332,9 +332,9 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
           setState(() {
             this.isLoading = true;
           });
-          postRequest(suggestProfile, {"content": textController.text})
+          postRequest(url: suggestProfile, body: {"content": textController.text})
               .then((data) {
-            if (data.status == "ok") {
+            if (data.status == 200) {
               Navigator.of(context).pop();
               successFlushbar("Suggestion sent")..show(context);
               setState(() {

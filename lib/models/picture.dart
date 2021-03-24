@@ -71,7 +71,7 @@ class Picture {
 }
 
 Future<List<Picture>> fetchPictures(String url) async {
-  final response = await getRequest(url);
+  final response = await getRequest(url: url);
   List<Picture> answer = [];
   for (final jsonObject in response.jsonContent) {
     answer.add(Picture.fromJson(jsonObject));

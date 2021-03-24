@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:potok/globals.dart';
 
 const GREY = Color.fromRGBO(105, 105, 105, 1);
 const SEMI_GREY = Color.fromRGBO(150, 150, 150, 1);
@@ -19,6 +20,8 @@ abstract class Theme {
   get icons;
 
   get texts;
+
+  get input;
 }
 
 class LightTheme implements Theme {
@@ -30,6 +33,9 @@ class LightTheme implements Theme {
 
   @override
   get texts => LightTexts();
+
+  @override
+  get input => LightInput();
 }
 
 class DarkTheme implements Theme {
@@ -41,6 +47,9 @@ class DarkTheme implements Theme {
 
   @override
   get texts => DarkTexts();
+
+  @override
+  get input => LightInput();
 }
 
 class LightColors {
@@ -124,11 +133,7 @@ class LightIcons {
     opacity: 0.85,
   );
 
-  var pictureViewerMore = IconThemeData(
-    color: WHITE,
-    size: 35,
-    opacity: 0.85
-  );
+  var pictureViewerMore = IconThemeData(color: WHITE, size: 35, opacity: 0.85);
 
   var profileTabBar = IconThemeData(
     color: BLACK,
@@ -197,11 +202,8 @@ class LightTexts {
     fontWeight: FontWeight.w500,
   );
 
-  TextStyle inputHint = TextStyle(
-      fontFamily: "Sofia",
-      fontSize: 18,
-      color: Colors.grey
-  );
+  TextStyle inputHint =
+      TextStyle(fontFamily: "Sofia", fontSize: 19, color: Colors.grey);
 
   TextStyle homeScreenAppBarSelected = TextStyle(
     fontFamily: 'Sofia',
@@ -592,6 +594,13 @@ class LightTexts {
     fontSize: 15,
     fontWeight: FontWeight.w500,
   );
+
+  TextStyle errorRegistration = TextStyle(
+    fontFamily: 'Sofia',
+    color: RED,
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+  );
 }
 
 class DarkTexts {
@@ -705,5 +714,26 @@ class DarkTexts {
     color: GREY,
     fontSize: 17,
     fontWeight: FontWeight.w500,
+  );
+}
+
+class LightInput {
+  InputDecoration input = InputDecoration(
+    floatingLabelBehavior: FloatingLabelBehavior.never,
+    filled: true,
+    alignLabelWithHint: true,
+    fillColor: Color.fromRGBO(235, 235, 235, 1),
+    border: OutlineInputBorder(),
+    labelText: 'Label text',
+    labelStyle: theme.texts.inputHint,
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    contentPadding: EdgeInsets.all(13),
   );
 }

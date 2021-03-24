@@ -15,6 +15,7 @@ import 'package:potok/widgets/common/animations.dart';
 import 'package:potok/widgets/common/flushbar.dart';
 import 'package:potok/widgets/common/navigator_push.dart';
 import 'package:potok/widgets/home/picture_viewer.dart';
+import 'package:potok/widgets/registration/registration.dart';
 import 'package:potok/widgets/settings/settings.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -32,7 +33,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder<Response>(
-        future: getRequest(config.myProfileUrl),
+        future: getRequest(url: config.myProfileUrl),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ProfileScreen(
@@ -140,9 +141,13 @@ class _ProfileScreen extends State<ProfileScreen>
 
   Widget getButton() {
     return TextButton(
-      onPressed: () => {
-        getRequest(widget.profile.subscribeUrl).then((data) {
-          if (data.status == "ok") {
+      onPressed: () {
+        if (!globals.isLogged) {
+          showAuthenticationScreen(context);
+          return;
+        }
+        getRequest(url: widget.profile.subscribeUrl).then((data) {
+          if (data.status == 200) {
             setState(() {
               this.isSubscribed =
                   cacher.updateSub(widget.profile.id, !this.isSubscribed);
@@ -150,7 +155,7 @@ class _ProfileScreen extends State<ProfileScreen>
           } else {
             errorFlushbar("Failed to subscribe")..show(context);
           }
-        })
+        });
       },
       style: TextButton.styleFrom(
         splashFactory: NoSplash.splashFactory,
@@ -322,8 +327,9 @@ class _ProfileScreen extends State<ProfileScreen>
                                 : theme.colors.attentionColor,
                             size: 27),
                         () {
-                          getRequest(widget.profile.blockUrl).then((response) {
-                            getRequest(widget.profile.reloadUrl)
+                          getRequest(url: widget.profile.blockUrl)
+                              .then((response) {
+                            getRequest(url: widget.profile.reloadUrl)
                                 .then((response) {
                               widget.profile =
                                   objectFromJson(response.jsonContent);
@@ -593,7 +599,9 @@ class _PicturesGridState extends State<PicturesGrid>
     } else {
       return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
-          if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && storage.hasMore && !storage.isLoading) {
+          if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+              storage.hasMore &&
+              !storage.isLoading) {
             storage.addObjects().then((value) => setState(() {}));
           }
           return false;
@@ -601,16 +609,17 @@ class _PicturesGridState extends State<PicturesGrid>
         child: GridView.builder(
           itemCount: storage.size(),
           shrinkWrap: true,
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
             if (index == storage.size()) {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
-                  child:
-                  StyledLoadingIndicator(color: theme.colors.secondaryColor),
+                  child: StyledLoadingIndicator(
+                      color: theme.colors.secondaryColor),
                 ),
               );
             }
@@ -640,17 +649,19 @@ class _PicturesGridState extends State<PicturesGrid>
                         "Delete picture",
                         Icon(Icons.delete_outline_rounded,
                             color: theme.colors.attentionColor, size: 27),
-                            () {
+                        () {
                           if (isLoading) return;
                           isLoading = true;
-                          getRequest(storage.getObject(index).deleteUrl).then(
-                                (response) async {
-                              if (response.status == "ok") {
+                          getRequest(url: storage.getObject(index).deleteUrl)
+                              .then(
+                            (response) async {
+                              if (response.status == 200) {
                                 await storage
                                     .rebuild()
                                     .then((value) => setState(() {}));
                                 Navigator.pop(context);
-                                successFlushbar("Picture deleted")..show(context);
+                                successFlushbar("Picture deleted")
+                                  ..show(context);
                               } else {
                                 errorFlushbar("Failed to delete picture")
                                   ..show(context);

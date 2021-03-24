@@ -11,6 +11,7 @@ import 'package:potok/widgets/common/animations.dart';
 import 'package:potok/widgets/home/actions_toolbar.dart';
 import 'package:potok/widgets/home/home_screen.dart';
 import 'package:potok/widgets/profile/profile_screen.dart';
+import 'package:potok/widgets/registration/registration.dart';
 import 'package:potok/widgets/search/search_screen.dart';
 import 'package:potok/widgets/upload/upload_picture.dart';
 
@@ -39,9 +40,13 @@ class _AppScreenState extends State<AppScreen> {
       profileAnimatorKey
     ][index]
         .triggerAnimation();
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index > 1 && !globals.isLogged) {
+      showAuthenticationScreen(context);
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   setStateBottomBar() {

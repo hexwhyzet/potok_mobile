@@ -21,6 +21,7 @@ import 'package:potok/widgets/common/circle_avatar.dart';
 import 'package:potok/widgets/common/flushbar.dart';
 import 'package:potok/widgets/common/navigator_push.dart';
 import 'package:potok/widgets/profile/profile_screen.dart';
+import 'package:potok/widgets/registration/registration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActionsToolbar extends StatefulWidget {
@@ -259,8 +260,12 @@ class _ProfilePicture extends State<ProfilePicture> {
           if (!this.isSubscribed && !widget.profile.isYours)
             GestureDetector(
               onTap: () {
-                getRequest(widget.profile.subscribeUrl).then((data) {
-                  if (data.status == "ok") {
+                if (!globals.isLogged) {
+                  showAuthenticationScreen(context);
+                  return;
+                }
+                getRequest(url: widget.profile.subscribeUrl).then((data) {
+                  if (data.status == 200) {
                     setState(() {
                       this.isSubscribed = true;
                       globals.cacher.updateSub(widget.profile.id, true);
@@ -318,8 +323,8 @@ class _LikeButton extends State<LikeButton> {
   }
 
   likeRequest() {
-    getRequest(widget.picture.likeUrl).then((data) {
-      if (data.status == "ok") {
+    getRequest(url: widget.picture.likeUrl).then((data) {
+      if (data.status == 200) {
         _pressed();
       } else {
         errorFlushbar("Failed to like")..show(context);
@@ -499,9 +504,9 @@ class _CommentSectionState extends State<CommentSection> {
                         () {
                           if (isLoading) return;
                           isLoading = true;
-                          getRequest(comment.deleteUrl).then(
+                          getRequest(url: comment.deleteUrl).then(
                             (response) async {
-                              if (response.status == "ok") {
+                              if (response.status == 200) {
                                 await commentsStorage
                                     .rebuild()
                                     .then((value) => setState(() {}));
@@ -596,7 +601,7 @@ class _CommentSectionState extends State<CommentSection> {
                     child: Container(
                       child: GestureDetector(
                         onTap: () {
-                          getRequest(comment.likeUrl).then((value) {
+                          getRequest(url: comment.likeUrl).then((value) {
                             animatorKey.triggerAnimation();
                             setState(
                               () {
@@ -774,10 +779,10 @@ class _AddCommentState extends State<AddComment> {
       return;
     }
     Response response = await postRequest(
-      addCommentUrl,
-      {"content": textController.text.trim()},
+      url: addCommentUrl,
+      body: {"content": textController.text.trim()},
     );
-    if (response.status == "ok") {
+    if (response.status == 200) {
       textController.clear();
       if (widget.updateComments != null) widget.updateComments();
       Navigator.of(context).pop();
@@ -815,11 +820,13 @@ class _AddCommentState extends State<AddComment> {
                 contentPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               ),
               onTap: () {
+                if (!globals.isLogged) {
+                  showAuthenticationScreen(context);
+                  return;
+                }
                 showModalBottomSheet(
-                  // enableDrag: false,
                   context: context,
                   builder: (BuildContext context) {
-                    final bottom = MediaQuery.of(context).viewInsets.bottom;
                     return SafeArea(
                       bottom: true,
                       top: false,
@@ -868,8 +875,8 @@ class ShareButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         animatorKey.triggerAnimation(restart: true);
-        getRequest(picture.getShareUrl).then((response) {
-          if (response.status == "ok") {
+        getRequest(url: picture.getShareUrl).then((response) {
+          if (response.status == 200) {
             Clipboard.setData(
                 new ClipboardData(text: response.jsonContent["share_url"]));
             if (tracker != null) {
@@ -915,7 +922,7 @@ class MoreButton extends StatelessWidget {
                 Icon(Icons.outlined_flag_rounded,
                     color: theme.colors.attentionColor, size: 27),
                 () {
-                  getRequest(picture.reportUrl).then((response) {
+                  getRequest(url: picture.reportUrl).then((response) {
                     Navigator.pop(context);
                     successFlushbar(
                         "Picture is reported.\nModerators will review it.")

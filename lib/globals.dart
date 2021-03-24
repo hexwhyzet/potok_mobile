@@ -9,7 +9,7 @@ bool isVisibleInterface = true;
 
 bool isLogged = false;
 
-int homeScreenTabIndex = 0;
+int homeScreenTabIndex = 1;
 
 String sessionToken;
 
@@ -28,3 +28,5 @@ final darkTheme = DarkTheme();
 final lightTheme = LightTheme();
 
 final theme = lightTheme;
+
+Function restartApp;

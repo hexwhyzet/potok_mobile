@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:potok/config.dart' as config;
 import 'package:potok/models/picture.dart';
 import 'package:potok/models/profile.dart';
 import 'package:potok/models/response.dart';
-import 'dart:convert';
 
 class Ticket {
   final int id;
@@ -33,7 +34,7 @@ class Ticket {
     );
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "id": this.id,
       "token": this.token,
@@ -64,5 +65,8 @@ Future<void> returnTickets(tickets) async {
   // for (var ticket in tickets) {
   //   jsonReturn.add(generateJson(ticket));
   // }
-  await postRequest(config.returnTickets, {"content": jsonEncode(tickets)});
+  await postRequest(
+    url: config.returnTickets,
+    body: {"content": jsonEncode(tickets)},
+  );
 }

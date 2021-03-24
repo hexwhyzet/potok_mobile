@@ -5,8 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:preload_page_view/preload_page_view.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart';
 import 'package:potok/models/response.dart';
@@ -15,6 +13,8 @@ import 'package:potok/widgets/common/actions_bottom_sheet.dart';
 import 'package:potok/widgets/common/background_card.dart';
 import 'package:potok/widgets/common/button.dart';
 import 'package:potok/widgets/common/flushbar.dart';
+import 'package:preload_page_view/preload_page_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UploadPictureScreen extends StatefulWidget {
   @override
@@ -54,10 +54,11 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
 
   Future<Response> sendPicture() async {
     String base64Picture = base64Encode(_picture.readAsBytesSync());
-    final Response response = await postRequest(config.uploadPictureUrl, {
+    final Response response =
+        await postRequest(url: config.uploadPictureUrl, body: {
       "picture": base64Picture,
       "extension": _picture.path.split(".").last,
-      "link": linkController.text.trim()
+      "link": linkController.text.trim(),
     });
     return response;
   }
@@ -138,7 +139,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
               duration: Duration(milliseconds: 400), curve: Curves.ease);
         } else {
           sendPicture().then((response) {
-            if (response.status == "ok") {
+            if (response.status == 200) {
               successFlushbar("Picture uploaded")..show(context);
               setState(() {
                 this._picture = null;
@@ -250,12 +251,12 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                                 children: [
                                   TextSpan(
                                     text:
-                                    "You can add link to your picture.\nFor example if you want to post ads.\n",
+                                        "You can add link to your picture.\nFor example if you want to post ads.\n",
                                     style: theme.texts.header,
                                   ),
                                   TextSpan(
                                     text:
-                                    "Note that picture with link cannot be displayed on 'for you' tab.",
+                                        "Note that picture with link cannot be displayed on 'for you' tab.",
                                     style: theme.texts.body,
                                   ),
                                 ],
@@ -271,7 +272,8 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                               ),
                               controller: linkController,
                               decoration: InputDecoration(
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
                                 filled: true,
                                 fillColor: Color.fromRGBO(235, 235, 235, 1),
                                 border: OutlineInputBorder(),
@@ -306,7 +308,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                                 children: [
                                   TextSpan(
                                     text:
-                                    "By pressing UPLOAD button you automatically agree with EULA terms according content you are uploading.",
+                                        "By pressing UPLOAD button you automatically agree with EULA terms according content you are uploading.",
                                     style: theme.texts.body,
                                   ),
                                 ],
@@ -314,10 +316,12 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                String url = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula";
+                                String url =
+                                    "https://www.apple.com/legal/internet-services/itunes/dev/stdeula";
                                 if (await canLaunch(url)) {
                                   await launch(url,
-                                      forceSafariVC: false, forceWebView: false);
+                                      forceSafariVC: false,
+                                      forceWebView: false);
                                 } else {
                                   throw 'Could not launch ${url}';
                                 }

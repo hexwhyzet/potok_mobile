@@ -118,7 +118,7 @@ class PictureViewerStorage extends Storage {
 
   void markAsSeen(int position) {
     String url = "${config.markAsSeenUrl}/${getObject(position).id}";
-    getRequest(url);
+    getRequest(url: url);
   }
 
   void updateLastPosition(int newLastPosition) {
@@ -169,7 +169,7 @@ class TicketStorage extends Storage {
 
   void markAsSeen(int position) {
     String url = "${config.markAsSeenUrl}/${getObject(position).picture.id}";
-    getRequest(url);
+    getRequest(url: url);
   }
 
   void updateLastPosition(int newLastPosition) {
