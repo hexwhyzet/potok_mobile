@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_restart/flutter_restart.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:potok/config.dart' as config;
@@ -75,14 +75,13 @@ Future<bool> isUserLogged() async {
   return false;
 }
 
-Future<void> logOut() async {
+Future<void> logOut(context) async {
   deleteToken();
-  restartApp();
+  restartApp(context);
 }
 
-Future<void> restartApp() async {
-  deleteToken();
-  FlutterRestart.restartApp();
+Future<void> restartApp(context) async {
+  Phoenix.rebirth(context);
 }
 
 Future<bool> loginUser() async {

@@ -28,5 +28,3 @@ final darkTheme = DarkTheme();
 final lightTheme = LightTheme();
 
 final theme = lightTheme;
-
-Function restartApp;

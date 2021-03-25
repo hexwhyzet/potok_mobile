@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_restart/flutter_restart.dart';
 import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/globals.dart';
@@ -104,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 await writeToken(response.jsonContent["token"]);
                 globals.isLogged = true;
                 await successFlushbar("Logged in").show(context);
-                FlutterRestart.restartApp();
+                restartApp(context);
               } else {
                 errorFlushbar("Failed to log in").show(context);
                 print("Error" +
@@ -255,7 +254,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 await writeToken(response.jsonContent["token"]);
                 globals.isLogged = true;
                 await successFlushbar("Account created").show(context);
-                FlutterRestart.restartApp();
+                restartApp(context);
               } else {
                 errorFlushbar("Failed to create account").show(context);
                 print("Error" +

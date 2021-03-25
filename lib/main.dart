@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart' as globals;
@@ -18,7 +19,11 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   // debugPrintGestureArenaDiagnostics = true;
-  runApp(MyApp());
+  runApp(
+    Phoenix(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

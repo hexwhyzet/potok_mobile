@@ -461,7 +461,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
           }),
           header("Actions"),
           tile("Log out", () {
-            logOut();
+            logOut(context);
           }),
         ],
       ),
