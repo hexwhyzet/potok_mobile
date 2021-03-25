@@ -7,6 +7,7 @@ import 'package:potok/icons.dart';
 import 'package:potok/models/response.dart';
 import 'package:potok/requests/logging.dart';
 import 'package:potok/styles/constraints.dart';
+import 'package:potok/widgets/common/flushbar.dart';
 import 'package:potok/widgets/common/navigator_push.dart';
 
 void showAuthenticationScreen(context) {
@@ -98,11 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 auth: false,
               ).then((response) {
-                if (response.status == 201) {
+                if (response.status == 200) {
                   writeToken(response.jsonContent["token"]);
                   globals.isLogged = true;
+                  successFlushbar("Logged in")..show(context);
                   Navigator.pop(context);
                 } else {
+                  errorFlushbar("Failed to log in")..show(context);
                   print("Error" +
                       response.jsonContent.toString() +
                       response.detail.toString());
@@ -251,11 +254,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
                 auth: false,
               ).then((response) {
-                if (response.status == 200) {
+                if (response.status == 201) {
+                  print(1);
                   writeToken(response.jsonContent["token"]);
+                  print(2);
                   globals.isLogged = true;
-                  Navigator.pop(context);
+                  print(3);
+                  successFlushbar("Account created")..show(context);
+                  print(4);
+                  // Navigator.pop(context);
+                  print(5);
                 } else {
+                  errorFlushbar("Failed to create account")..show(context);
                   print("Error" +
                       response.jsonContent.toString() +
                       response.detail.toString());
