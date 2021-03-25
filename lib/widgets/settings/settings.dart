@@ -13,6 +13,7 @@ import 'package:potok/icons.dart';
 import 'package:potok/models/objects.dart';
 import 'package:potok/models/profile.dart';
 import 'package:potok/models/response.dart';
+import 'package:potok/requests/logging.dart';
 import 'package:potok/styles/constraints.dart';
 import 'package:potok/widgets/common/actions_bottom_sheet.dart';
 import 'package:potok/widgets/common/animations.dart';
@@ -457,6 +458,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                     likedPictures: true),
               ),
             );
+          }),
+          header("Actions"),
+          tile("Log out", () {
+            logOut();
           }),
         ],
       ),

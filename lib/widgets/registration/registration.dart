@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_restart/flutter_restart.dart';
 import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/globals.dart';
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
         leading: BackArrowButton(),
         actions: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (getErrorText() != "") {
                 setState(() {
                   errorText = getErrorText();
@@ -91,29 +92,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 return;
               }
               print(emailInput.text);
-              postRequest(
+              Response response = await postRequest(
                 url: config.loginUrl,
                 body: {
                   "email": emailInput.text,
                   "password": passwordInput.text
                 },
                 auth: false,
-              ).then((response) {
-                if (response.status == 200) {
-                  writeToken(response.jsonContent["token"]);
-                  globals.isLogged = true;
-                  successFlushbar("Logged in")..show(context);
-                  Navigator.pop(context);
-                } else {
-                  errorFlushbar("Failed to log in")..show(context);
-                  print("Error" +
-                      response.jsonContent.toString() +
-                      response.detail.toString());
-                  setState(() {
-                    errorText = response.detail;
-                  });
-                }
-              });
+              );
+              if (response.status == 200) {
+                await writeToken(response.jsonContent["token"]);
+                globals.isLogged = true;
+                await successFlushbar("Logged in").show(context);
+                FlutterRestart.restartApp();
+              } else {
+                errorFlushbar("Failed to log in").show(context);
+                print("Error" +
+                    response.jsonContent.toString() +
+                    response.detail.toString());
+              }
             },
             child: Container(
               child: Icon(
@@ -238,7 +235,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         leading: BackArrowButton(),
         actions: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (getErrorText() != "") {
                 setState(() {
                   errorText = getErrorText();
@@ -246,34 +243,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 return;
               }
               print(emailInput.text);
-              postRequest(
+              Response response = await postRequest(
                 url: config.registrationUrl,
                 body: {
                   "email": emailInput.text,
                   "password": passwordInput.text
                 },
                 auth: false,
-              ).then((response) {
-                if (response.status == 201) {
-                  print(1);
-                  writeToken(response.jsonContent["token"]);
-                  print(2);
-                  globals.isLogged = true;
-                  print(3);
-                  successFlushbar("Account created")..show(context);
-                  print(4);
-                  // Navigator.pop(context);
-                  print(5);
-                } else {
-                  errorFlushbar("Failed to create account")..show(context);
-                  print("Error" +
-                      response.jsonContent.toString() +
-                      response.detail.toString());
-                  setState(() {
-                    errorText = response.detail;
-                  });
-                }
-              });
+              );
+              if (response.status == 201) {
+                await writeToken(response.jsonContent["token"]);
+                globals.isLogged = true;
+                await successFlushbar("Account created").show(context);
+                FlutterRestart.restartApp();
+              } else {
+                errorFlushbar("Failed to create account").show(context);
+                print("Error" +
+                    response.jsonContent.toString() +
+                    response.detail.toString());
+              }
             },
             child: Container(
               child: Icon(

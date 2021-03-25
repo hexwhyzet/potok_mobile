@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_restart/flutter_restart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:potok/config.dart' as config;
@@ -26,6 +27,11 @@ Future<void> writeToken(String token) async {
   await storage.write(key: TOKEN_KEY, value: token);
 }
 
+Future<void> deleteToken() async {
+  final storage = new FlutterSecureStorage();
+  await storage.delete(key: TOKEN_KEY);
+}
+
 Future<String> getDeviceId() async {
   String deviceId = await PlatformDeviceId.getDeviceId;
   return deviceId;
@@ -40,39 +46,43 @@ Future<Map<String, String>> getAuthHeaders() async {
 
 Future<bool> getAnonymousAuthToken() async {
   Map<String, String> body = {"device_id": await getDeviceId()};
-  await postRequest(url: config.authTokenByDeviceId, body: body, auth: false)
-      .then((response) async {
-    if (response.status == 200) {
-      String token = response.jsonContent["token"];
-      await writeToken(token);
-      return true;
-    } else {
-      print("Authorization failed, anonymous token wasn't received");
-      return false;
-    }
-  });
-  print("Authorization request failed");
+  Response response = await postRequest(
+      url: config.authTokenByDeviceId, body: body, auth: false);
+  if (response.status == 200) {
+    String token = response.jsonContent["token"];
+    await writeToken(token);
+    return true;
+  }
   return false;
 }
 
 Future<bool> getSessionToken() async {
-  await getRequest(url: config.createSessionUrl).then((response) {
-    if (response.status == 200) {
-      String sessionToken = response.jsonContent["session_token"];
-      globals.sessionToken = sessionToken;
-      return true;
-    }
-  });
+  Response response = await getRequest(url: config.createSessionUrl);
+  if (response.status == 200) {
+    String sessionToken = response.jsonContent["session_token"];
+    globals.sessionToken = sessionToken;
+    return true;
+  }
   return false;
 }
 
 Future<bool> isUserLogged() async {
-  await getRequest(url: config.isUserLogged).then((response) {
-    if (response.status == 200) {
-      return response.jsonContent["is_logged"];
-    }
-  });
+  Response response = await getRequest(url: config.isUserLogged);
+  if (response.status == 200) {
+    bool value = response.jsonContent["is_logged"];
+    return value;
+  }
   return false;
+}
+
+Future<void> logOut() async {
+  deleteToken();
+  restartApp();
+}
+
+Future<void> restartApp() async {
+  deleteToken();
+  FlutterRestart.restartApp();
 }
 
 Future<bool> loginUser() async {
