@@ -58,12 +58,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String errorText = "";
+
   bool isSent = false;
 
   TextEditingController emailInput = TextEditingController();
   TextEditingController passwordInput = TextEditingController();
 
-  String errorText() {
+  String getErrorText() {
     if (isSent) {
       if (emailInput.text == "" || passwordInput.text == "") {
         return "All field should be filled";
@@ -81,10 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              if (errorText() != "") {
+              if (getErrorText() != "") {
                 setState(() {
-                  isSent = true;
+                  errorText = getErrorText();
                 });
+                return;
               }
               print(emailInput.text);
               postRequest(
@@ -103,6 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   print("Error" +
                       response.jsonContent.toString() +
                       response.detail.toString());
+                  setState(() {
+                    errorText = response.detail;
+                  });
                 }
               });
             },
@@ -140,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: emailInput,
                 autocorrect: false,
                 enableSuggestions: false,
+                style: theme.texts.registrationScreen,
                 decoration: theme.input.input.copyWith(labelText: "email"),
               ),
             ),
@@ -150,13 +157,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 autocorrect: false,
                 obscureText: true,
                 enableSuggestions: false,
+                style: theme.texts.registrationScreen,
                 decoration: theme.input.input.copyWith(labelText: "password"),
               ),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(15, 11, 15, 11),
               child: Text(
-                errorText(),
+                errorText,
                 style: theme.texts.errorRegistration,
               ),
             ),
@@ -196,13 +204,15 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  String errorText = "";
+
   bool isSent = false;
 
   TextEditingController emailInput = TextEditingController();
   TextEditingController passwordInput = TextEditingController();
   TextEditingController repeatPasswordInput = TextEditingController();
 
-  String errorText() {
+  String getErrorText() {
     if (isSent) {
       if (emailInput.text == "" ||
           passwordInput.text == "" ||
@@ -226,10 +236,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              if (errorText() != "") {
+              if (getErrorText() != "") {
                 setState(() {
-                  isSent = true;
+                  errorText = getErrorText();
                 });
+                return;
               }
               print(emailInput.text);
               postRequest(
@@ -248,6 +259,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   print("Error" +
                       response.jsonContent.toString() +
                       response.detail.toString());
+                  setState(() {
+                    errorText = response.detail;
+                  });
                 }
               });
             },
@@ -285,6 +299,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 controller: emailInput,
                 autocorrect: false,
                 enableSuggestions: false,
+                style: theme.texts.registrationScreen,
                 decoration: theme.input.input.copyWith(labelText: "email"),
               ),
             ),
@@ -295,6 +310,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 autocorrect: false,
                 obscureText: true,
                 enableSuggestions: false,
+                style: theme.texts.registrationScreen,
                 decoration: theme.input.input.copyWith(labelText: "password"),
               ),
             ),
@@ -305,6 +321,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 autocorrect: false,
                 obscureText: true,
                 enableSuggestions: false,
+                style: theme.texts.registrationScreen,
                 decoration: theme.input.input.copyWith(
                   labelText: "repeat password",
                 ),
@@ -313,7 +330,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Container(
               padding: EdgeInsets.fromLTRB(15, 11, 15, 11),
               child: Text(
-                errorText(),
+                errorText,
                 style: theme.texts.errorRegistration,
               ),
             ),
@@ -324,6 +341,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   widget.goToLoginScreen();
                 },
                 child: Container(
+                  padding: EdgeInsets.all(10),
                   alignment: Alignment.center,
                   child: Text(
                     "Go to login page",

@@ -601,6 +601,13 @@ class LightTexts {
     fontSize: 17,
     fontWeight: FontWeight.w600,
   );
+
+  TextStyle registrationScreen = TextStyle(
+    fontFamily: 'Sofia',
+    color: BLACK,
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 class DarkTexts {
