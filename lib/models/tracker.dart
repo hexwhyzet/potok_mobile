@@ -8,7 +8,9 @@ class TrackerManager {
   TrackerManager({this.ticketStorage});
 
   updateView(int index) {
-    ticketStorage.getObject(index).isViewed = true;
+    if (ticketStorage.getObject(index) is Ticket) {
+      ticketStorage.getObject(index).isViewed = true;
+    }
   }
 
   getTracker(int index) {
