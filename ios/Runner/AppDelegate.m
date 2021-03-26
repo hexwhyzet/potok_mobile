@@ -32,14 +32,14 @@
  ((UIImageView *)adView.iconView).image = nativeAd.icon.image;
  adView.iconView.hidden = nativeAd.icon ? NO : YES;
 
- ((UILabel *)adView.storeView).text = nativeAd.store;
- adView.storeView.hidden = nativeAd.store ? NO : YES;
+// ((UILabel *)adView.storeView).text = nativeAd.store;
+// adView.storeView.hidden = nativeAd.store ? NO : YES;
+//
+// ((UILabel *)adView.priceView).text = nativeAd.price;
+// adView.priceView.hidden = nativeAd.price ? NO : YES;
 
- ((UILabel *)adView.priceView).text = nativeAd.price;
- adView.priceView.hidden = nativeAd.price ? NO : YES;
-
- ((UILabel *)adView.advertiserView).text = nativeAd.advertiser;
- adView.advertiserView.hidden = nativeAd.advertiser ? NO : YES;
+// ((UILabel *)adView.advertiserView).text = nativeAd.advertiser;
+// adView.advertiserView.hidden = nativeAd.advertiser ? NO : YES;
 
  // In order for the SDK to process touch events properly, user interaction
  // should be disabled.

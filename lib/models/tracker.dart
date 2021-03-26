@@ -18,13 +18,15 @@ class TrackerManager {
   sendBack({int threshold = 10}) async {
     var ctr = 0;
     for (var i = ticketStorage.size() - 1; i > 0; i--) {
-      if (!ticketStorage.getObject(i).isReturned &&
+      if (ticketStorage.getObject(i) is Ticket &&
+          !ticketStorage.getObject(i).isReturned &&
           ticketStorage.getObject(i).isViewed) ctr += 1;
     }
     if (ctr > threshold) {
       var unsentTickets = [];
       for (var i = ticketStorage.size() - 1; i > 0; i--) {
-        if (!ticketStorage.getObject(i).isReturned &&
+        if (ticketStorage.getObject(i) is Ticket &&
+            !ticketStorage.getObject(i).isReturned &&
             ticketStorage.getObject(i).isViewed) ctr += 1;
         unsentTickets.add(ticketStorage.getObject(i));
       }

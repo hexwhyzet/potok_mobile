@@ -16,6 +16,9 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		DB5B6C1125FB98AC0033D772 /* UnifiedNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB5B6C1025FB98AC0033D772 /* UnifiedNativeAdView.xib */; };
+		DBBC6A2B260E56F300CA3AFE /* sofia_light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DBBC6A28260E56F300CA3AFE /* sofia_light.otf */; };
+		DBBC6A2C260E56F300CA3AFE /* sofia_regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DBBC6A29260E56F300CA3AFE /* sofia_regular.otf */; };
+		DBBC6A2D260E56F300CA3AFE /* sofia_semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DBBC6A2A260E56F300CA3AFE /* sofia_semibold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +53,9 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C926E29DBDEC3710C6D022E9 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB5B6C1025FB98AC0033D772 /* UnifiedNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnifiedNativeAdView.xib; sourceTree = "<group>"; };
+		DBBC6A28260E56F300CA3AFE /* sofia_light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sofia_light.otf; sourceTree = "<group>"; };
+		DBBC6A29260E56F300CA3AFE /* sofia_regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sofia_regular.otf; sourceTree = "<group>"; };
+		DBBC6A2A260E56F300CA3AFE /* sofia_semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sofia_semibold.otf; sourceTree = "<group>"; };
 		EFCE514C44A3B1CCE5F754D2 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +114,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				DBBC6A21260E560C00CA3AFE /* fonts */,
 				DB5B6C1025FB98AC0033D772 /* UnifiedNativeAdView.xib */,
 				7AFFD8ED1D35381100E5BB4D /* AppDelegate.h */,
 				7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */,
@@ -136,6 +143,16 @@
 				C926E29DBDEC3710C6D022E9 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DBBC6A21260E560C00CA3AFE /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DBBC6A28260E56F300CA3AFE /* sofia_light.otf */,
+				DBBC6A29260E56F300CA3AFE /* sofia_regular.otf */,
+				DBBC6A2A260E56F300CA3AFE /* sofia_semibold.otf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,10 +218,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				DBBC6A2D260E56F300CA3AFE /* sofia_semibold.otf in Resources */,
+				DBBC6A2C260E56F300CA3AFE /* sofia_regular.otf in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				DB5B6C1125FB98AC0033D772 /* UnifiedNativeAdView.xib in Resources */,
+				DBBC6A2B260E56F300CA3AFE /* sofia_light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
