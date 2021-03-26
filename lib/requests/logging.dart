@@ -84,9 +84,17 @@ Future<void> restartApp(context) async {
   Phoenix.rebirth(context);
 }
 
+Future<bool> isAuthValid() async {
+  Response response = await getRequest(url: config.isUserLogged);
+  if (response.detail == "Invalid authentication. Could not decode token." || response.detail == "No user matching this token was found.") {
+    return false;
+  }
+  return true;
+}
+
 Future<bool> loginUser() async {
   bool isTokenReceived;
-  if (!await doesTokenExist()) {
+  if (!await doesTokenExist() || !await isAuthValid()) {
     isTokenReceived = await getAnonymousAuthToken();
   } else {
     isTokenReceived = true;

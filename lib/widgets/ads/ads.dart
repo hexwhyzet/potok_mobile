@@ -21,6 +21,10 @@ class AdsWidget extends StatefulWidget {
 
 class _AdsWidgetState extends State<AdsWidget> {
   NativeAd myNative;
+  bool isAdLoaded = false;
+
+  // test unit id: ca-app-pub-3940256099942544/2247696110
+  // prod unit id: ca-app-pub-7687358047308544/3062480096
 
   @override
   void initState() {
@@ -28,8 +32,15 @@ class _AdsWidgetState extends State<AdsWidget> {
       adUnitId: 'ca-app-pub-3940256099942544/2247696110',
       factoryId: 'adFactoryExample',
       request: AdRequest(testDevices: ["210fa3a81f233e19a5f2e550c7f37160"]),
-      listener: AdListener(),
+      listener: AdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            isAdLoaded = true;
+          });
+        }
+      ),
     );
+    myNative.load();
     super.initState();
   }
 
@@ -41,44 +52,30 @@ class _AdsWidgetState extends State<AdsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      left: false,
-      right: false,
-      top: false,
-      bottom: true,
-      child: FutureBuilder(
-        future: myNative.load(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              alignment: Alignment.center,
-              width: 500,
-              height: 500,
-              child: AdWidget(ad: myNative),
-            );
-          } else {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Ads is loading",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontFamily: "Sofia",
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  StyledLoadingIndicator(color: Colors.white),
-                ],
+    if (isAdLoaded) {
+      return Container(
+        child: AdWidget(ad: myNative),
+      );
+    } else {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Ads is loading",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontFamily: "Sofia",
               ),
-            );
-          }
-        },
-      ),
-    );
+            ),
+            Container(
+              height: 10,
+            ),
+            StyledLoadingIndicator(color: Colors.white),
+          ],
+        ),
+      );
+    }
   }
 }

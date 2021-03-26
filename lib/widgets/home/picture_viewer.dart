@@ -143,7 +143,13 @@ class PictureViewerState extends State<PictureViewer> {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, position) {
         if (widget.storage.getObject(position) is Ads) {
-          return AdsWidget();
+          return SafeArea(
+            top: false,
+            left: false,
+            right: false,
+            bottom: true,
+            child: AdsWidget(),
+          );
         }
         if (position == 0 && widget.storage.size() == 0) {
           return emptyPage;

@@ -1,27 +1,90 @@
-<com.google.android.gms.ads.formats.UnifiedNativeAdView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content">
-  <LinearLayout
-    android:orientation="vertical"
+<com.google.android.gms.ads.formats.UnifiedNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-      android:id="@+id/ad_headline"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+    android:layout_height="match_parent">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/ad_image"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="270dp"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:scaleType="centerCrop"/>-->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/ad_body"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
-  </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="15dp">
+
+                    <ImageView
+                        android:id="@+id/ad_app_icon"
+                        android:layout_width="33dp"
+                        android:layout_height="33dp"
+                        android:contentDescription="Icon" />
+
+                    <TextView
+                        android:id="@+id/ad_headline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sofia_regular"
+                        android:paddingLeft="15dp"
+                        android:textColor="#ffffff"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sofia_regular"
+                        android:paddingLeft="15dp"
+                        android:text="Sponsored"
+                        android:textColor="#9e9e9e"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <com.google.android.gms.ads.formats.MediaView
+                    android:id="@+id/ad_media"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/ad_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sofia_regular"
+                    android:padding="15dp"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/ad_call_to_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/rounded_corners"
+            android:fontFamily="@font/sofia_regular"
+            android:gravity="center"
+            android:padding="6dp"
+            android:radius="10dp"
+            android:textColor="#50ffffff"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
 </com.google.android.gms.ads.formats.UnifiedNativeAdView>

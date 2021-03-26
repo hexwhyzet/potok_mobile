@@ -178,6 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     "Go to sing up page",
                     style: TextStyle(
+                      fontFamily: 'Sofia',
                       fontSize: 15,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -343,6 +344,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Text(
                     "Go to login page",
                     style: TextStyle(
+                      fontFamily: 'Sofia',
                       fontSize: 15,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
