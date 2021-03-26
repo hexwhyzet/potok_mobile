@@ -25,8 +25,10 @@ String reportPicture = 'https://$mainServerIp/app/report_picture';
 String changeName = 'https://$mainServerIp/app/change_setting/name';
 String changeUsername = 'https://$mainServerIp/app/change_setting/screen_name';
 String trendingProfiles = 'https://$mainServerIp/app/trending';
-String settingChangeIsPublic = 'https://$mainServerIp/app/change_setting/is_public';
-String settingChangeAreLikedPicturesPublic = 'https://$mainServerIp/app/change_setting/are_liked_pictures_public';
+String settingChangeIsPublic =
+    'https://$mainServerIp/app/change_setting/is_public';
+String settingChangeAreLikedPicturesPublic =
+    'https://$mainServerIp/app/change_setting/are_liked_pictures_public';
 String tickets = 'https://$mainServerIp/app/tickets';
 String returnTickets = 'https://$mainServerIp/app/return_tickets';
 String registrationUrl = 'https://$mainServerIp/app/registration';
@@ -35,3 +37,4 @@ String isUserLogged = 'https://$mainServerIp/app/is_logged';
 
 String adsAndroidUnitId = 'ca-app-pub-7687358047308544/3062480096';
 String adsIosUnitId = 'ca-app-pub-7687358047308544/5497071747';
+String adsDebugUnitId = 'ca-app-pub-3940256099942544/2247696110';

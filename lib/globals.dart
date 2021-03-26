@@ -5,6 +5,8 @@ import 'package:potok/models/storage.dart';
 import 'package:potok/models/tracker.dart';
 import 'package:potok/styles/themes.dart';
 
+bool isDebug = true;
+
 bool isVisibleInterface = true;
 
 bool isLogged = false;
