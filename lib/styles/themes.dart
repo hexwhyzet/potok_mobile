@@ -608,6 +608,20 @@ class LightTexts {
     fontSize: 17,
     fontWeight: FontWeight.w500,
   );
+
+  TextStyle registrationVerificationLabel = TextStyle(
+    fontFamily: 'Sofia',
+    color: BLACK,
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+  );
+
+  TextStyle registrationVerificationCode = TextStyle(
+    fontFamily: 'Sofia',
+    color: BLACK,
+    fontSize: 22,
+    fontWeight: FontWeight.w600,
+  );
 }
 
 class DarkTexts {

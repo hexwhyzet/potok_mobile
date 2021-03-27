@@ -34,6 +34,8 @@ String returnTickets = 'https://$mainServerIp/app/return_tickets';
 String registrationUrl = 'https://$mainServerIp/app/registration';
 String loginUrl = 'https://$mainServerIp/app/login';
 String isUserLogged = 'https://$mainServerIp/app/is_logged';
+String validateCredentials = 'https://$mainServerIp/app/validate_credentials';
+String initiateVerification = 'https://$mainServerIp/app/initiate_verification';
 
 String adsAndroidUnitId = 'ca-app-pub-7687358047308544/3062480096';
 String adsIosUnitId = 'ca-app-pub-7687358047308544/5497071747';

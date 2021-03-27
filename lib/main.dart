@@ -14,6 +14,7 @@ import 'package:potok/requests/logging.dart';
 import 'package:potok/styles/constraints.dart';
 import 'package:potok/widgets/common/animations.dart';
 import 'package:potok/widgets/common/bottom_navigation.dart';
+import 'package:potok/widgets/registration/registration.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

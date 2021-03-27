@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/globals.dart';
@@ -242,25 +243,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 });
                 return;
               }
-              print(emailInput.text);
               Response response = await postRequest(
-                url: config.registrationUrl,
+                url: config.validateCredentials,
                 body: {
                   "email": emailInput.text,
                   "password": passwordInput.text
                 },
                 auth: false,
               );
-              if (response.status == 201) {
-                await writeToken(response.jsonContent["token"]);
-                globals.isLogged = true;
-                await successFlushbar("Account created").show(context);
-                restartApp(context);
+              if (response.status == 200) {
+                postRequest(
+                  url: config.initiateVerification,
+                  body: {
+                    "email": emailInput.text,
+                  }
+                );
+                Navigator.push(
+                  context,
+                  createRoute(
+                    EmailVerificationScreen(
+                      email: emailInput.text,
+                      password: passwordInput.text,
+                    ),
+                  ),
+                );
+              setState(() {
+                errorText = "";
+              });
               } else {
-                errorFlushbar("Failed to create account").show(context);
-                print("Error" +
-                    response.jsonContent.toString() +
-                    response.detail.toString());
+                setState(() {
+                  errorText = response.detail;
+                });
               }
             },
             child: Container(
@@ -352,6 +365,75 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EmailVerificationScreen extends StatefulWidget {
+  String email;
+  String password;
+
+  EmailVerificationScreen({this.email, this.password});
+
+  @override
+  _EmailVerificationScreenState createState() =>
+      _EmailVerificationScreenState();
+}
+
+class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: BackArrowButton(),
+        toolbarHeight: ConstraintsHeights.appBarHeight,
+        backgroundColor: theme.colors.appBarColor,
+        elevation: constraintElevation,
+      ),
+      body: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(bottom: 300),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: Text(
+                "Enter verification code",
+                style: theme.texts.registrationVerificationLabel,
+              ),
+            ),
+            VerificationCode(
+              textStyle: theme.texts.registrationVerificationCode,
+              underlineColor: theme.colors.secondaryColor,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              length: 6,
+              onCompleted: (String value) async {
+                Response response = await postRequest(
+                  url: config.registrationUrl,
+                  body: {
+                    "email": widget.email,
+                    "password": widget.password,
+                    "code": value,
+                  },
+                  auth: false,
+                );
+                if (response.status == 201) {
+                    await writeToken(response.jsonContent["token"]);
+                    globals.isLogged = true;
+                    await successFlushbar("Account created").show(context);
+                    restartApp(context);
+                } else {
+                    errorFlushbar(response.detail).show(context);
+                }
+              },
+              onEditing: (bool value) {},
             ),
           ],
         ),
