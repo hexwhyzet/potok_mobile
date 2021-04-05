@@ -106,10 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 await successFlushbar("Logged in").show(context);
                 restartApp(context);
               } else {
-                errorFlushbar("Failed to log in").show(context);
-                print("Error" +
-                    response.jsonContent.toString() +
-                    response.detail.toString());
+                if (response.detail == "A user with this email and password was not found.") {
+                  errorText = "A user with this email and password was not found.";
+                }
+                errorFlushbar("Authorization failed").show(context);
               }
             },
             child: Container(
