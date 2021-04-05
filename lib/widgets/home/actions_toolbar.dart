@@ -695,7 +695,7 @@ class _CommentSectionState extends State<CommentSection> {
                   child: Stack(
                     children: [
                       Container(
-                        height: 40,
+                        height: 45,
                         decoration: BoxDecoration(
                           color: theme.colors.appBarColor,
                           borderRadius: BorderRadius.only(
@@ -709,7 +709,7 @@ class _CommentSectionState extends State<CommentSection> {
                         ),
                       ),
                       Container(
-                        height: 40,
+                        height: 45,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.only(
@@ -721,11 +721,11 @@ class _CommentSectionState extends State<CommentSection> {
                         child: IconButton(
                           padding: EdgeInsets.all(0),
                           icon: Container(
-                            height: 26,
-                            width: 26,
+                            height: 24,
+                            width: 24,
                             decoration: BoxDecoration(
                               color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(13)
+                              borderRadius: BorderRadius.circular(12)
                             ),
                             child: IconTheme(
                               data: IconThemeData(

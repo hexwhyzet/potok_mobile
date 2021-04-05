@@ -36,7 +36,7 @@ Future<Response> getRequest(
 
   if (auth) _headers.addAll(await getAuthHeaders());
 
-  final rawResponse = await http.get(url, headers: _headers);
+  final rawResponse = await http.get(Uri.parse(url), headers: _headers);
   // print(rawResponse.body);
   return Response.fromJson(json.decode(rawResponse.body));
 }
@@ -54,7 +54,7 @@ Future<Response> postRequest(
   Map<String, String> _body = {};
   _body.addAll(body);
 
-  final rawResponse = await http.post(url, headers: _headers, body: _body);
+  final rawResponse = await http.post(Uri.parse(url), headers: _headers, body: _body);
   // print(rawResponse.body);
   return Response.fromJson(json.decode(rawResponse.body));
 }

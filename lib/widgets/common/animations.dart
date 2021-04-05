@@ -65,32 +65,3 @@ class _StyledLoadingIndicatorState extends State<StyledLoadingIndicator>
     );
   }
 }
-
-class FadeIn extends StatelessWidget {
-  final Duration delay;
-  final Widget child;
-  final Duration duration;
-
-  FadeIn(this.delay, this.duration, this.child);
-
-  @override
-  Widget build(BuildContext context) {
-    final tween = MultiTrackTween([
-      Track("opacity").add(duration, Tween(begin: 0.0, end: 1.0)),
-      Track("translateX")
-          .add(duration, Tween(begin: 200.0, end: 0.0), curve: Curves.easeIn)
-    ]);
-
-    return ControlledAnimation(
-      delay: delay,
-      duration: tween.duration,
-      tween: tween,
-      child: child,
-      builderWithChild: (context, child, animation) => Opacity(
-        opacity: animation["opacity"],
-        child: Transform.translate(
-            offset: Offset(animation["translateX"], 0), child: child),
-      ),
-    );
-  }
-}

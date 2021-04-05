@@ -29,8 +29,9 @@ class TrackerManager {
       for (var i = ticketStorage.size() - 1; i > 0; i--) {
         if (ticketStorage.getObject(i) is Ticket &&
             !ticketStorage.getObject(i).isReturned &&
-            ticketStorage.getObject(i).isViewed) ctr += 1;
-        unsentTickets.add(ticketStorage.getObject(i));
+            ticketStorage.getObject(i).isViewed) {
+          unsentTickets.add(ticketStorage.getObject(i));
+        };
       }
       unsentTickets.sublist(0, unsentTickets.length - 2);
       // striping 2 last viewed pictures to that user can return
@@ -39,7 +40,7 @@ class TrackerManager {
           ticket.isReturned = true;
         }
       }, onError: (e) {
-        print("Failed to return tickets");
+        print("${e.toString()}\nFailed to return tickets");
       });
     }
   }

@@ -283,15 +283,11 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                                 labelText: 'Link to attach',
                                 labelStyle: theme.texts.inputHint,
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(110, 110, 110, 1),
-                                      width: 2),
+                                  borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(170, 170, 170, 1),
-                                      width: 2),
+                                  borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 contentPadding: EdgeInsets.all(12),

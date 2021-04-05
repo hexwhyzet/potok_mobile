@@ -13,7 +13,7 @@ Flushbar styledFlushbar(String text, Color color, IconData icon) {
     duration: Duration(milliseconds: 1250),
     margin: EdgeInsets.fromLTRB(8, 12, 8, 8),
     padding: EdgeInsets.all(15),
-    borderRadius: 10,
+    borderRadius: BorderRadius.circular(10),
     backgroundColor: color,
     messageText: Text(
       text,
