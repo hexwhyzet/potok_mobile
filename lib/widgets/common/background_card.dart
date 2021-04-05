@@ -41,9 +41,9 @@ BoxDecoration backgroundCardDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(17),
     boxShadow: <BoxShadow>[
       BoxShadow(
-        color: Colors.grey.withOpacity(0.25),
-        spreadRadius: 2,
-        blurRadius: 10,
+        color: Colors.grey.withOpacity(0.2),
+        spreadRadius: 1,
+        blurRadius: 5,
         offset: Offset(0, 0),
       ),
     ]);
