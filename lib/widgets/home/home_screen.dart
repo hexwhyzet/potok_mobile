@@ -34,7 +34,7 @@ class _HomeScreen extends State<HomeScreen>
   void initState() {
     super.initState();
     _tabController = TabController(
-        initialIndex: globals.homeScreenTabIndex, length: 2, vsync: this);
+        initialIndex: globals.isLogged ? globals.homeScreenTabIndex : 1, length: 2, vsync: this);
   }
 
   @override
