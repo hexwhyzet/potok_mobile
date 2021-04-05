@@ -32,7 +32,10 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
 
   Future picFromCamera() async {
     final picker = ImagePicker();
-    final picture = await picker.getImage(source: ImageSource.camera);
+    final picture = await picker.getImage(
+      source: ImageSource.camera,
+      imageQuality: 75,
+    );
     setState(() {
       if (picture != null) {
         this._picture = File(picture.path);
