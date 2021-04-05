@@ -720,12 +720,20 @@ class _CommentSectionState extends State<CommentSection> {
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           padding: EdgeInsets.all(0),
-                          icon: IconTheme(
-                            data: IconThemeData(
-                              color: Colors.black,
-                              size: 20,
+                          icon: Container(
+                            height: 26,
+                            width: 26,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(13)
                             ),
-                            child: Icon(Icons.close),
+                            child: IconTheme(
+                              data: IconThemeData(
+                                color: Colors.black,
+                                size: 18,
+                              ),
+                              child: Icon(Icons.close),
+                            ),
                           ),
                           onPressed: () => Navigator.of(context).pop(),
                         ),

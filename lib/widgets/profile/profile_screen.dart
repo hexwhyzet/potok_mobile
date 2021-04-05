@@ -200,28 +200,14 @@ class _ProfileScreen extends State<ProfileScreen>
         children: [
           Row(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  color: theme.colors.profileAvatarOutline,
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                padding: EdgeInsets.all(2),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(60),
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: theme.colors.backgroundColor,
-                    borderRadius: BorderRadius.circular(58),
-                  ),
-                  padding: EdgeInsets.all(2),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(57),
-                    child: Container(
-                      width: 114,
-                      height: 114,
-                      child: StyledFadeInImageNetwork(
-                        image: widget.profile.avatarUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  width: 120,
+                  height: 120,
+                  child: StyledFadeInImageNetwork(
+                    image: widget.profile.avatarUrl,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
