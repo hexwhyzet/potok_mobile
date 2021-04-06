@@ -5,7 +5,7 @@ import 'package:potok/models/storage.dart';
 import 'package:potok/models/tracker.dart';
 import 'package:potok/styles/themes.dart';
 
-bool isDebug = false;
+bool isDebug = true;
 
 bool isVisibleInterface = true;
 

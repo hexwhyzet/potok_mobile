@@ -107,7 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 restartApp(context);
               } else {
                 if (response.detail == "A user with this email and password was not found.") {
-                  errorText = "A user with this email and password was not found.";
+                  setState(() {
+                    errorText = "Email or password is incorrect.";
+                  });
                 }
                 errorFlushbar("Authorization failed").show(context);
               }
@@ -271,9 +273,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 errorText = "";
               });
               } else {
-                setState(() {
-                  errorText = response.detail;
-                });
+                if (response.jsonContent != null && response.jsonContent.containsKey("email") && response.jsonContent["email"][0] == "user with this email address already exists.") {
+                  setState(() {
+                    errorText = "This email is already registered.";
+                  });
+                } else {
+                  if (response.detail != null) {
+                    setState(() {
+                      errorText = response.detail;
+                    });
+                  }
+                }
               }
             },
             child: Container(
@@ -352,7 +362,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   widget.goToLoginScreen();
                 },
                 child: Container(
-                  padding: EdgeInsets.all(10),
                   alignment: Alignment.center,
                   child: Text(
                     "Go to login page",
@@ -403,9 +412,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
+              padding: EdgeInsets.all(15),
               child: Text(
-                "Enter verification code",
+                "Enter verification code that has been sent on your email",
                 style: theme.texts.registrationVerificationLabel,
+                textAlign: TextAlign.center,
               ),
             ),
             VerificationCode(
@@ -434,6 +445,13 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 }
               },
               onEditing: (bool value) {},
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(15, 45, 15, 15),
+              child: Text(
+                "If there is no letter check out spam folder",
+                style: theme.texts.registrationDescription,
+              ),
             ),
           ],
         ),

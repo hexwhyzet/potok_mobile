@@ -622,6 +622,13 @@ class LightTexts {
     fontSize: 22,
     fontWeight: FontWeight.w600,
   );
+
+  TextStyle registrationDescription = TextStyle(
+    fontFamily: 'Sofia',
+    color: GREY,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 class DarkTexts {

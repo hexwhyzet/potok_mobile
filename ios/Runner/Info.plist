@@ -8,6 +8,13 @@
 	<string>Used to upload picture or avatar</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7687358047308544~3637195166</string>
+	<key>SKAdNetworkItems</key>
+      <array>
+        <dict>
+          <key>SKAdNetworkIdentifier</key>
+          <string>cstr6suwn9.skadnetwork</string>
+        </dict>
+      </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
