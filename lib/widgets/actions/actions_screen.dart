@@ -82,7 +82,6 @@ class _ActionsScreenState extends State<ActionsScreen>
             BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             itemCount: storage.size(),
             itemBuilder: (context, position) {
-              print(storage.objects);
               dynamic action = storage.getObject(position);
               Profile profile = action.profile;
               return Container(

@@ -265,7 +265,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   }
 
   Future<void> cropImage() async {
-    print(cropKey.currentState);
     final scale = cropKey.currentState.scale;
     final area = cropKey.currentState.area;
     if (area == null) {
