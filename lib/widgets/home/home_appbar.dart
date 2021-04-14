@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:potok/globals.dart' as globals;
+import 'package:potok/globals.dart';
 import 'package:potok/widgets/registration/registration.dart';
 
 
@@ -36,6 +37,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
       elevation: 0.0,
       centerTitle: true,
       title: Container(
+        padding: EdgeInsets.all(45),
+        alignment: Alignment.center,
         child: TabBar(
           controller: widget._tabController,
           onTap: (index) {
@@ -53,20 +56,27 @@ class _HomeAppBarState extends State<HomeAppBar> {
             }
           },
           labelPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          indicator: BoxDecoration(),
+          indicatorSize: TabBarIndicatorSize.label,
+          // indicator: UnderlineTabIndicator(
+          //   borderSide: BorderSide(
+          //     width: 5,
+          //     color: theme.colors.secondaryColor,
+          //   ),
+          // ),
+          indicator: CustomTabIndicator(),
           labelStyle: globals.theme.texts.homeScreenAppBarSelected,
           labelColor: globals.theme.texts.homeScreenAppBarSelected.color,
           unselectedLabelStyle: globals.theme.texts.homeScreenAppBarUnSelected,
           unselectedLabelColor: globals.theme.texts.homeScreenAppBarUnSelected.color,
           tabs: <Widget>[
             Container(
-              alignment: Alignment.centerRight,
+              // padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
               child: Text(
                 "following",
               ),
             ),
             Container(
-              alignment: Alignment.centerLeft,
+              // padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
               child: Text(
                 "for you",
               ),
@@ -75,5 +85,37 @@ class _HomeAppBarState extends State<HomeAppBar> {
         ),
       ),
     );
+  }
+}
+
+class CustomTabIndicator extends Decoration {
+
+  @override
+  _CustomPainter createBoxPainter([VoidCallback onChanged]) {
+    return new _CustomPainter(this, onChanged);
+  }
+
+}
+
+class _CustomPainter extends BoxPainter {
+
+  final CustomTabIndicator decoration;
+
+  _CustomPainter(this.decoration, VoidCallback onChanged)
+      : assert(decoration != null),
+        super(onChanged);
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    assert(configuration != null);
+    assert(configuration.size != null);
+
+    //offset is the position from where the decoration should be drawn.
+    //configuration.size tells us about the height and width of the tab.
+    final Rect rect = Offset(offset.dx + configuration.size.width / 4, offset.dy) & Size(configuration.size.width / 2, 4);
+    final Paint paint = Paint();
+    paint.color = theme.colors.secondaryColor.withOpacity(0.95);
+    paint.style = PaintingStyle.fill;
+    canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(5.0)), paint);
   }
 }

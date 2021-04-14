@@ -116,6 +116,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
         controller.nextPage(
             duration: Duration(milliseconds: 400), curve: Curves.ease);
       },
+      isArrow: true,
     );
   }
 
@@ -126,6 +127,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
         controller.previousPage(
             duration: Duration(milliseconds: 400), curve: Curves.ease);
       },
+      isArrow: true,
     );
   }
 

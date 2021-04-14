@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 class BlueButton extends StatelessWidget {
   final Function onPressed;
 
-  // final TextStyle textStyle;
   final Widget label;
 
-  final BorderRadius borderRadius = BorderRadius.circular(8);
+  final bool isArrow;
 
-  BlueButton({this.onPressed, this.label});
+  final BorderRadius borderRadius = BorderRadius.circular(10);
+
+  BlueButton({this.onPressed, this.label, this.isArrow=false});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
+        minimumSize: Size(0, 45),
         alignment: Alignment.center,
         elevation: 2,
-        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+        padding: isArrow ? EdgeInsets.fromLTRB(10, 7, 10, 7) : EdgeInsets.fromLTRB(22, 7, 22, 7),
         backgroundColor: Color.fromRGBO(20, 133, 255, 1),
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius,

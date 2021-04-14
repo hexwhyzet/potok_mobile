@@ -208,14 +208,14 @@ class LightTexts {
   TextStyle homeScreenAppBarSelected = TextStyle(
     fontFamily: 'Sofia',
     color: WHITE,
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: FontWeight.w600,
   );
 
   TextStyle homeScreenAppBarUnSelected = TextStyle(
     fontFamily: 'Sofia',
     color: WHITE.withOpacity(0.6),
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: FontWeight.w600,
   );
 
@@ -510,7 +510,7 @@ class LightTexts {
     fontFamily: 'Sofia',
     color: GREY,
     fontSize: 16,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
 
   TextStyle searchHint = TextStyle(

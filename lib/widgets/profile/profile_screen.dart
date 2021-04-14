@@ -576,16 +576,29 @@ class _PicturesGridState extends State<PicturesGrid>
         );
       } else {
         return Center(
-          child: Text(
-            "No pictures yet",
-            style: theme.texts.searchEmptyQuery,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 200,
+                child: Image(image: AssetImage('assets/images/tears.png')),
+              ),
+              Container(
+                height: 20,
+              ),
+              Text(
+                "No pictures yet",
+                style: theme.texts.searchEmptyQuery,
+              ),
+            ],
           ),
         );
       }
     } else {
       return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
-          if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+          print([scrollInfo.metrics.pixels, scrollInfo.metrics.maxScrollExtent]);
+          if (scrollInfo.metrics.pixels + 600 > scrollInfo.metrics.maxScrollExtent &&
               storage.hasMore &&
               !storage.isLoading) {
             storage.addObjects().then((value) => setState(() {}));
@@ -593,22 +606,26 @@ class _PicturesGridState extends State<PicturesGrid>
           return false;
         },
         child: GridView.builder(
-          itemCount: storage.size(),
+          itemCount: storage.size() + (storage.hasMore ? 2 : 0),
           shrinkWrap: true,
           physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
+
             if (index == storage.size()) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
+              return Container();
+            } else if (index == storage.size() + 1) {
+              return Container(
+                child: Center(
                   child: StyledLoadingIndicator(
-                      color: theme.colors.secondaryColor),
+                    color: theme.colors.secondaryColor,
+                  ),
                 ),
               );
             }
+
             final Picture picture = storage.getObject(index);
             return GestureDetector(
               onTap: () {
@@ -635,12 +652,12 @@ class _PicturesGridState extends State<PicturesGrid>
                         "Delete picture",
                         Icon(Icons.delete_outline_rounded,
                             color: theme.colors.attentionColor, size: 27),
-                        () {
+                            () {
                           if (isLoading) return;
                           isLoading = true;
                           getRequest(url: storage.getObject(index).deleteUrl)
                               .then(
-                            (response) async {
+                                (response) async {
                               if (response.status == 200) {
                                 await storage
                                     .rebuild()

@@ -33,7 +33,7 @@ class _AdsWidgetState extends State<AdsWidget> {
     myNative = NativeAd(
       adUnitId: unitId,
       factoryId: 'adFactoryExample',
-      request: AdRequest(testDevices: ["210fa3a81f233e19a5f2e550c7f37160"]),
+      request: AdRequest(),
       listener: AdListener(onAdLoaded: (_) {
         setState(() {
           isAdLoaded = true;
@@ -62,7 +62,7 @@ class _AdsWidgetState extends State<AdsWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Ads is loading",
+              "Ad is loading",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,

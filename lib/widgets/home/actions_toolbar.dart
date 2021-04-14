@@ -211,16 +211,32 @@ class ProfilePicture extends StatefulWidget {
 
 class _ProfilePicture extends State<ProfilePicture> {
   bool isSubscribed = false;
+  AnimatorKey<double> animatorKey;
+  bool isTouched = true;
+  bool isUnTouched = true;
 
   @override
   void initState() {
     super.initState();
     this.isSubscribed = getIsSubscribed();
+    this.animatorKey = AnimatorKey<double>(
+      initialValue: this.isSubscribed ? 0 : 1,
+    );
   }
 
   bool getIsSubscribed() {
     return globals.cacher
         .checkSub(widget.profile.id, widget.profile.isSubscribed);
+  }
+
+  double scaleCurve(double value) {
+    if (value > 0.85) {
+      return 1 + (1 - value) * 1.5;
+    } else if (value > 0.7) {
+      return 1 + (value - 0.7) * 1.5;
+    } else {
+      return value / 0.7;
+    }
   }
 
   @override
@@ -249,17 +265,16 @@ class _ProfilePicture extends State<ProfilePicture> {
                     ),
                   ),
                 );
-                if (this.isSubscribed != getIsSubscribed()) {
-                  setState(() {
-                    this.isSubscribed = !this.isSubscribed;
-                  });
-                }
+                setState(() {
+                  isUnTouched = true;
+                  this.isSubscribed = getIsSubscribed();
+                });
               }
             },
           ),
-          if (!this.isSubscribed && !widget.profile.isYours)
-            GestureDetector(
-              onTap: () {
+          GestureDetector(
+            onTap: () {
+              if (!isSubscribed) {
                 if (!globals.isLogged) {
                   showAuthenticationScreen(context);
                   return;
@@ -274,21 +289,47 @@ class _ProfilePicture extends State<ProfilePicture> {
                     errorFlushbar("Failed to subscribe")..show(context);
                   }
                 });
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: 40),
-                child: Container(
-                  width: 19,
-                  height: 19,
-                  decoration: BoxDecoration(
-                    color: theme.colors.pictureViewerSubscribeBubble,
-                    shape: BoxShape.circle,
+                animatorKey.triggerAnimation();
+                isUnTouched = false;
+              }
+            },
+            child: Animator<double>(
+              resetAnimationOnRebuild: false,
+              animatorKey: animatorKey,
+              tween: Tween<double>(begin: 1, end: 0),
+              repeats: 1,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.linear,
+              builder: (context, animatorState, child) {
+
+                return Container(
+                  margin: EdgeInsets.only(top: 40),
+                  child: Transform.rotate(
+                    angle: animatorState.value * pi,
+                    child: Transform.scale(
+                      scale: isUnTouched ? (isSubscribed ? 0 : 1) : scaleCurve(animatorState.value),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: 21,
+                          height: 21,
+                          decoration: BoxDecoration(
+                            color: theme.colors.pictureViewerSubscribeBubble,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.add_rounded,
+                            size: 18,
+                            color: theme.colors.pictureViewerCross,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Icon(Icons.add_rounded,
-                      size: 17, color: theme.colors.pictureViewerCross),
-                ),
-              ),
-            )
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -650,11 +691,23 @@ class _CommentSectionState extends State<CommentSection> {
           child: StyledLoadingIndicator(color: theme.colors.secondaryColor),
         );
       } else {
-        return Center(
-          child: Text(
-            "No comments yet",
-            style: theme.texts.emptyCommentSection,
-          ),
+        return Stack(
+          children: [
+            Center(
+              child: Text(
+                "No comments yet",
+                style: theme.texts.emptyCommentSection,
+              ),
+            ),
+            if (Random().nextInt(100) > 99)Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                width: 150,
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Image(image: AssetImage('assets/images/waiting.png')),
+              ),
+            )
+          ],
         );
       }
     }
@@ -835,11 +888,8 @@ class _AddCommentState extends State<AddComment> {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
-                    return SafeArea(
-                      bottom: true,
-                      top: false,
-                      left: false,
-                      right: false,
+                    return Container(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                       child: Container(
                         alignment: Alignment.center,
                         height: ConstraintsHeights.navigationBarHeight,
