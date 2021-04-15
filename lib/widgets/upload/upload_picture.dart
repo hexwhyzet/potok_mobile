@@ -30,6 +30,8 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
 
   TextEditingController linkController = TextEditingController();
 
+  bool isEULAgreementChecked = false;
+
   Future picFromCamera() async {
     final picker = ImagePicker();
     final picture = await picker.getImage(
@@ -136,6 +138,10 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
     return BlueButton(
       label: Text('Upload picture', style: theme.texts.uploadButton),
       onPressed: () {
+        if (!isEULAgreementChecked) {
+          errorFlushbar("You have to agree with EULA terms").show(context);
+          return;
+        }
         if (isLoading) return;
         isLoading = true;
         if (_picture == null) {
@@ -299,21 +305,39 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            RichText(
-                              textAlign: TextAlign.justify,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "By pressing UPLOAD button you automatically agree with EULA terms according content you are uploading.",
-                                    style: theme.texts.body,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 36,
+                                  width: 36,
+                                  child: Checkbox(
+                                    activeColor: theme.colors.secondaryColor,
+                                    value: isEULAgreementChecked,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        isEULAgreementChecked = !isEULAgreementChecked;
+                                      });
+                                    },
                                   ),
-                                ],
-                              ),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isEULAgreementChecked = !isEULAgreementChecked;
+                                      });
+                                    },
+                                    child: Text(
+                                      "I agree with EULA terms according content I am uploading.",
+                                      style: theme.texts.body,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             GestureDetector(
                               onTap: () async {
@@ -331,7 +355,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                                 "Learn more about EULA agreement",
                                 style: theme.texts.uploadEULALink,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

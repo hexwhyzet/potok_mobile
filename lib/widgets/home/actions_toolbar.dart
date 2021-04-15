@@ -272,7 +272,7 @@ class _ProfilePicture extends State<ProfilePicture> {
               }
             },
           ),
-          GestureDetector(
+          if (!widget.profile.isYours) GestureDetector(
             onTap: () {
               if (!isSubscribed) {
                 if (!globals.isLogged) {
@@ -889,10 +889,10 @@ class _AddCommentState extends State<AddComment> {
                   context: context,
                   builder: (BuildContext context) {
                     return Container(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      height: ConstraintsHeights.navigationBarHeight,
+                      // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                       child: Container(
                         alignment: Alignment.center,
-                        height: ConstraintsHeights.navigationBarHeight,
                         child: TextFormField(
                           textInputAction: TextInputAction.send,
                           onEditingComplete: () async {

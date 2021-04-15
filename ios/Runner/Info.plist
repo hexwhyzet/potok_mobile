@@ -27,9 +27,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Used to upload picture or avatar</string>
+	<string>Used only to post pictures§ to your profile or upload avatar</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to upload picture or avatar</string>
+	<string>Used only to post pictures to your profile or upload avatar</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
