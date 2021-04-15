@@ -630,7 +630,7 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
                       });
                     },
                     style: TextButton.styleFrom(
-                      splashFactory: NoSplash.splashFactory,
+                      // splashFactory: NoSplash.splashFactory,
                       minimumSize: Size(double.infinity, 45),
                       backgroundColor: (doesHaveChanges())
                           ? Colors.grey.shade300

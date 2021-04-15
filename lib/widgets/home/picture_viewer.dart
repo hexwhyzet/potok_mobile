@@ -209,26 +209,14 @@ class PictureViewerState extends State<PictureViewer> {
     );
   }
 
-  Widget refreshIndicator(Widget inside) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        widget.storage.rebuild().then((_) {
-          setState(() {});
-        });
-        return await Future.delayed(Duration(seconds: 1));
-      },
-      child: inside,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     controller = PreloadPageController(
         initialPage: widget.storage.lastPosition, keepPage: false);
     if (widget.storage.size() > 0) {
-      return refreshIndicator(preloadPageViewWidget);
+      return preloadPageViewWidget;
     } else {
-      return refreshIndicator(firstLoading);
+      return firstLoading;
     }
   }
 }

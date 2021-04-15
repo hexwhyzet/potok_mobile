@@ -17,7 +17,6 @@ import 'package:potok/widgets/common/navigator_push.dart';
 import 'package:potok/widgets/home/picture_viewer.dart';
 import 'package:potok/widgets/registration/registration.dart';
 import 'package:potok/widgets/settings/settings.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyProfileScreen extends StatefulWidget {
   @override
@@ -120,7 +119,7 @@ class _ProfileScreen extends State<ProfileScreen>
         })
       },
       style: TextButton.styleFrom(
-        splashFactory: NoSplash.splashFactory,
+        // splashFactory: NoSplash.splashFactory,
         padding: EdgeInsets.all(0),
         minimumSize: Size(120, 35),
         shape: RoundedRectangleBorder(
@@ -158,7 +157,7 @@ class _ProfileScreen extends State<ProfileScreen>
         });
       },
       style: TextButton.styleFrom(
-        splashFactory: NoSplash.splashFactory,
+        // splashFactory: NoSplash.splashFactory,
         padding: EdgeInsets.all(0),
         minimumSize: Size(120, 35),
         backgroundColor: this.isSubscribed
@@ -466,8 +465,6 @@ class _ProfileScreen extends State<ProfileScreen>
   Widget build(BuildContext context) {
     this.isSubscribed =
         cacher.checkSub(widget.profile.id, widget.profile.isSubscribed);
-    RefreshController _refreshController =
-        RefreshController(initialRefresh: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: theme.colors.appBarColor,
