@@ -30,6 +30,20 @@ class _HomeScreen extends State<HomeScreen>
       GlobalKey<PictureViewerState>();
   GlobalKey<PictureViewerState> feedKey = GlobalKey<PictureViewerState>();
 
+  void hideInterface() {
+    setState(() {
+      globals.isVisibleInterface = false;
+    });
+    widget.setStateBottomBar();
+  }
+
+  void showInterface() {
+    setState(() {
+      globals.isVisibleInterface = true;
+    });
+    widget.setStateBottomBar();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,27 +100,25 @@ class _HomeScreen extends State<HomeScreen>
               key: subscriptionKey,
               storage: widget.subscriptionStorage,
               bottomPadding: 0,
+              hideActionsToolbar: hideInterface,
+              showActionsToolbar: showInterface,
             ),
             PictureViewer(
               key: feedKey,
               storage: widget.feedStorage,
               bottomPadding: 0,
               trackerManager: widget.trackerManager,
+              hideActionsToolbar: hideInterface,
+              showActionsToolbar: showInterface,
             ),
           ],
         ),
       ),
       onLongPressStart: (LongPressStartDetails details) {
-        setState(() {
-          globals.isVisibleInterface = false;
-        });
-        widget.setStateBottomBar();
+        hideInterface();
       },
       onLongPressEnd: (LongPressEndDetails details) {
-        setState(() {
-          globals.isVisibleInterface = true;
-        });
-        widget.setStateBottomBar();
+        showInterface();
       },
     );
   }

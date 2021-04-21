@@ -27,6 +27,19 @@ class PictureViewerScreen extends StatefulWidget {
 }
 
 class _PictureViewerScreenState extends State<PictureViewerScreen> {
+
+  void showInterface() {
+    setState(() {
+      globals.isVisibleInterface = true;
+    });
+  }
+
+  void hideInterface() {
+    setState(() {
+      globals.isVisibleInterface = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,16 +78,14 @@ class _PictureViewerScreenState extends State<PictureViewerScreen> {
         child: PictureViewer(
           storage: this.widget.storage,
           showProfileAvatar: this.widget.showProfileAvatar,
+          hideBackArrowAndCommentSection: hideInterface,
+          showBackArrowAndCommentSection: showInterface,
         ),
         onLongPressStart: (LongPressStartDetails details) {
-          setState(() {
-            globals.isVisibleInterface = false;
-          });
+          hideInterface();
         },
         onLongPressEnd: (LongPressEndDetails details) {
-          setState(() {
-            globals.isVisibleInterface = true;
-          });
+          showInterface();
         },
       ),
     );
@@ -86,13 +97,21 @@ class PictureViewer extends StatefulWidget {
   final double bottomPadding;
   final bool showProfileAvatar;
   final TrackerManager trackerManager;
+  Function hideBackArrowAndCommentSection;
+  Function showBackArrowAndCommentSection;
+  Function hideActionsToolbar;
+  Function showActionsToolbar;
 
   PictureViewer(
       {Key key,
       @required this.storage,
       this.bottomPadding = 0,
       this.showProfileAvatar = true,
-      this.trackerManager})
+      this.trackerManager,
+      this.hideBackArrowAndCommentSection,
+      this.showBackArrowAndCommentSection,
+      this.hideActionsToolbar,
+      this.showActionsToolbar})
       : super(key: key);
 
   @override
@@ -101,6 +120,24 @@ class PictureViewer extends StatefulWidget {
 
 class PictureViewerState extends State<PictureViewer> {
   PreloadPageController controller;
+
+  void hideInterface() {
+    if (widget.hideBackArrowAndCommentSection != null) {
+      widget.hideBackArrowAndCommentSection();
+    }
+    if (widget.hideActionsToolbar != null) {
+      widget.hideActionsToolbar();
+    }
+  }
+
+  void showInterface() {
+    if (widget.showBackArrowAndCommentSection != null) {
+      widget.showBackArrowAndCommentSection();
+    }
+    if (widget.showActionsToolbar != null) {
+      widget.showActionsToolbar();
+    }
+  }
 
   Widget get emptyPage {
     return SafeArea(
@@ -160,12 +197,16 @@ class PictureViewerState extends State<PictureViewer> {
             bottomPadding: widget.bottomPadding,
             showProfileAvatar: widget.showProfileAvatar,
             tracker: widget.trackerManager.getTracker(position),
+            hideInterface: hideInterface,
+            showInterface: showInterface,
           );
         }
         return RequestedPicture(
           picture: widget.storage.getObject(position),
           bottomPadding: widget.bottomPadding,
           showProfileAvatar: widget.showProfileAvatar,
+          hideInterface: hideInterface,
+          showInterface: showInterface,
         );
       },
       itemCount: max(widget.storage.size(), 1),
@@ -236,53 +277,130 @@ class VerticalGradientShadow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Align(
-            alignment: alignment,
-            child: Container(
-              height: height,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [upperColor, lowerColor],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter),
+    return StyledAnimatedOpacity(
+      visible: globals.isVisibleInterface,
+      child:  Column(
+        children: [
+          Expanded(
+            child: Align(
+              alignment: alignment,
+              child: Container(
+                height: height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [upperColor, lowerColor],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
-class PictureContainer extends StatelessWidget {
+class PictureContainer extends StatefulWidget {
   final String pictureUrl;
+  Function hideInterface;
+  Function showInterface;
+
 
   PictureContainer({
     @required this.pictureUrl,
+    this.hideInterface,
+    this.showInterface,
   });
+
+  @override
+  _PictureContainerState createState() => _PictureContainerState();
+}
+
+class _PictureContainerState extends State<PictureContainer> with TickerProviderStateMixin {
+  final TransformationController _transformationController =
+  TransformationController();
+  Animation<Matrix4> _animationReset;
+  AnimationController _controllerReset;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerReset = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+  }
+
+  void _onAnimateReset() {
+    _transformationController.value = _animationReset.value;
+    if (!_controllerReset.isAnimating) {
+      _animationReset?.removeListener(_onAnimateReset);
+      _animationReset = null;
+      _controllerReset.reset();
+    }
+  }
+
+  void _animateResetInitialize() {
+    _controllerReset.reset();
+    _animationReset = Matrix4Tween(
+      begin: _transformationController.value,
+      end: Matrix4.identity(),
+    ).animate(_controllerReset);
+    _animationReset.addListener(_onAnimateReset);
+    _controllerReset.forward();
+  }
+
+  void _animateResetStop() {
+    _controllerReset.stop();
+    _animationReset?.removeListener(_onAnimateReset);
+    _animationReset = null;
+    _controllerReset.reset();
+  }
+
+  void _onInteractionStart(ScaleStartDetails details) {
+    widget.hideInterface();
+    if (_controllerReset.status == AnimationStatus.forward) {
+      _animateResetStop();
+    }
+  }
+
+  void _onInteractionEnd(ScaleEndDetails details) {
+    widget.showInterface();
+    _animateResetInitialize();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: theme.colors.pictureViewerBackgroundColor,
       alignment: Alignment.center,
-      child: Stack(
-        children: [
-          Center(
-            child: StyledLoadingIndicator(
-              color: Colors.white,
-            ),
+      child: InteractiveViewer(
+        alignPanAxis: false,
+          panEnabled: false,
+          transformationController: _transformationController,
+          onInteractionStart: _onInteractionStart,
+          onInteractionEnd: _onInteractionEnd,
+          boundaryMargin: EdgeInsets.all(double.infinity),
+          minScale: 0.75,
+          maxScale: 3.0,
+          clipBehavior: Clip.none,
+          child: Stack(
+            children: [
+              Center(
+                child: StyledLoadingIndicator(
+                  color: Colors.white,
+                ),
+              ),
+              Center(
+                child: StyledFadeInImageNetwork(
+                  fit: BoxFit.contain,
+                  image: widget.pictureUrl,
+                ),
+              ),
+
+            ],
           ),
-          Center(
-            child: StyledFadeInImageNetwork(
-              fit: BoxFit.contain,
-              image: pictureUrl,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -293,12 +411,16 @@ class RequestedPicture extends StatefulWidget {
   final double bottomPadding;
   final bool showProfileAvatar;
   final Tracker tracker;
+  Function hideInterface;
+  Function showInterface;
 
   RequestedPicture({
     @required this.picture,
     this.bottomPadding = 0,
     this.showProfileAvatar = true,
     this.tracker,
+    this.hideInterface,
+    this.showInterface,
   });
 
   @override
@@ -338,16 +460,24 @@ class _RequestedPicture extends State<RequestedPicture> {
           children: <Widget>[
             PictureContainer(
               pictureUrl: widget.picture.highResUrl,
+              hideInterface: widget.hideInterface,
+              showInterface: widget.showInterface,
             ),
-            upperShadow,
-            lowerShadow,
-            StyledAnimatedOpacity(
-              visible: globals.isVisibleInterface,
-              child: ActionsToolbar(
-                picture: widget.picture,
-                bottomPadding: 0,
-                showProfile: widget.showProfileAvatar,
-                tracker: widget.tracker,
+            IgnorePointer(
+              child: upperShadow,
+            ),
+            IgnorePointer(
+              child: lowerShadow,
+            ),
+            IgnorePointer(
+              child: StyledAnimatedOpacity(
+                visible: globals.isVisibleInterface,
+                child: ActionsToolbar(
+                  picture: widget.picture,
+                  bottomPadding: 0,
+                  showProfile: widget.showProfileAvatar,
+                  tracker: widget.tracker,
+                ),
               ),
             ),
           ],
