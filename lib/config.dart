@@ -1,6 +1,8 @@
 library void_mobile_app.config;
 
-String mainServerIp = 'potok.app';
+import 'package:potok/globals.dart' as globals;
+
+String mainServerIp = globals.isQA ? 'qa.potok.app' : 'potok.app';
 String port = '80';
 
 String subscriptionUrl = 'https://$mainServerIp/app/subscription_pictures/';

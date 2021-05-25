@@ -421,6 +421,12 @@ class LightTexts {
     fontWeight: FontWeight.w600,
   );
 
+  TextStyle profileAttachmentButton = TextStyle(
+    fontFamily: 'Sofia',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  );
+
   TextStyle pictureViewerToolbarLabel = TextStyle(
     fontFamily: 'Sofia',
     color: WHITE.withOpacity(0.85),

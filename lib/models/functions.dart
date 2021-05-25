@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 String shortenNum(int num) {
   if (num >= 1e9) {
     return "${num ~/ 1e9},${num ~/ 1e8 % 10}B";
@@ -33,4 +35,12 @@ String shortenTimeDelta(int sec) {
   }
   d ~/= 12;
   return "${d}y";
+}
+
+openUniversalUrl(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url, forceSafariVC: false, forceWebView: false);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

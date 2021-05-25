@@ -4,9 +4,11 @@ import 'package:potok/config.dart' as config;
 import 'package:potok/globals.dart' as globals;
 import 'package:potok/globals.dart';
 import 'package:potok/icons.dart';
+import 'package:potok/models/functions.dart';
 import 'package:potok/models/objects.dart';
 import 'package:potok/models/picture.dart';
 import 'package:potok/models/profile.dart';
+import 'package:potok/models/profile_attachment.dart';
 import 'package:potok/models/response.dart';
 import 'package:potok/models/storage.dart';
 import 'package:potok/styles/constraints.dart';
@@ -17,6 +19,7 @@ import 'package:potok/widgets/common/navigator_push.dart';
 import 'package:potok/widgets/home/picture_viewer.dart';
 import 'package:potok/widgets/registration/registration.dart';
 import 'package:potok/widgets/settings/settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyProfileScreen extends StatefulWidget {
   @override
@@ -157,7 +160,11 @@ class _ProfileScreen extends State<ProfileScreen>
         });
       },
       style: TextButton.styleFrom(
+        primary: this.isSubscribed
+            ? Colors.transparent
+            : Colors.white,
         // splashFactory: NoSplash.splashFactory,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         padding: EdgeInsets.all(0),
         minimumSize: Size(120, 35),
         backgroundColor: this.isSubscribed
@@ -181,6 +188,50 @@ class _ProfileScreen extends State<ProfileScreen>
             : theme.texts.profileButtonUnSubscribed,
       ),
     );
+  }
+
+  Widget singleAttachmentButton(String text, Color textColor, Color backColor, String url) {
+    return Padding(
+      padding: EdgeInsets.only(left: 5),
+      child: TextButton(
+        onPressed: () async {
+          openUniversalUrl(url);
+        },
+        style: TextButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          minimumSize: Size(35, 35),
+          backgroundColor: backColor,
+          padding: EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+            side: BorderSide.none,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        child: Text(
+          text,
+          style: theme.texts.profileAttachmentButton.copyWith(
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget VkSingleAttachmentButton (String url) {
+    return singleAttachmentButton("VK", Colors.white, theme.colors.secondaryColor, url);
+  }
+
+
+  Widget getAttachmentsButton() {
+    switch(widget.profile.attachments.length) {
+      case 0:
+        return Container();
+      case 1:
+        ProfileAttachment attachment = widget.profile.attachments[0];
+        if (attachment.tag.toLowerCase() == "vk") {
+          return VkSingleAttachmentButton(attachment.url);
+        }
+    }
   }
 
   Widget getBlockText() {
@@ -241,7 +292,13 @@ class _ProfileScreen extends State<ProfileScreen>
                       ),
                       if (!widget.profile.isYours &&
                           widget.profile.isProfileAvailable)
-                        getButton(),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            getButton(),
+                            getAttachmentsButton(),
+                          ],
+                        ),
                       if (widget.profile.isUserBlockedByYou ||
                           widget.profile.areYouBlockedByUser)
                         getBlockText(),
@@ -594,8 +651,10 @@ class _PicturesGridState extends State<PicturesGrid>
     } else {
       return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
-          print([scrollInfo.metrics.pixels, scrollInfo.metrics.maxScrollExtent]);
-          if (scrollInfo.metrics.pixels + 600 > scrollInfo.metrics.maxScrollExtent &&
+          // print(
+          //     [scrollInfo.metrics.pixels, scrollInfo.metrics.maxScrollExtent]);
+          if (scrollInfo.metrics.pixels + 600 >
+                  scrollInfo.metrics.maxScrollExtent &&
               storage.hasMore &&
               !storage.isLoading) {
             storage.addObjects().then((value) => setState(() {}));
@@ -606,11 +665,10 @@ class _PicturesGridState extends State<PicturesGrid>
           itemCount: storage.size() + (storage.hasMore ? 2 : 0),
           shrinkWrap: true,
           physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
-
             if (index == storage.size()) {
               return Container();
             } else if (index == storage.size() + 1) {
@@ -649,12 +707,12 @@ class _PicturesGridState extends State<PicturesGrid>
                         "Delete picture",
                         Icon(Icons.delete_outline_rounded,
                             color: theme.colors.attentionColor, size: 27),
-                            () {
+                        () {
                           if (isLoading) return;
                           isLoading = true;
                           getRequest(url: storage.getObject(index).deleteUrl)
                               .then(
-                                (response) async {
+                            (response) async {
                               if (response.status == 200) {
                                 await storage
                                     .rebuild()

@@ -1,4 +1,5 @@
 import 'package:potok/models/objects.dart';
+import 'package:potok/models/profile_attachment.dart';
 import 'package:potok/models/response.dart';
 
 class Profile {
@@ -24,6 +25,7 @@ class Profile {
   final String getShareUrl;
   final String reloadUrl;
   final String blockUrl;
+  final List<dynamic> attachments;
 
   Profile({
     this.avatarUrl,
@@ -48,6 +50,7 @@ class Profile {
     this.reloadUrl,
     this.blockUrl,
     this.getShareUrl,
+    this.attachments,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -61,6 +64,7 @@ class Profile {
       isProfileAvailable: json['is_profile_available'],
       areLikedPicturesAvailable: json['are_liked_pictures_available'],
       name: json['name'],
+      attachments: objectsFromJson(json['attachments']),
       description: json['description'],
       screenName: json['screen_name'],
       avatarUrl: json['avatar_url'],

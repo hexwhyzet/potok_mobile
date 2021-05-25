@@ -8,7 +8,7 @@ import 'package:potok/globals.dart' as globals;
 import 'package:potok/widgets/common/animations.dart';
 
 String get unitId {
-  if (globals.isDebug) {
+  if (globals.isQA) {
     return config.adsDebugUnitId;
   }
 
