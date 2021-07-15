@@ -10,7 +10,7 @@ class Response {
   String detail;
   final jsonContent;
 
-  Response({this.status, this.jsonContent, this.detail});
+  Response({required this.status, this.jsonContent, required this.detail});
 
   factory Response.fromJson(Map<String, dynamic> json) {
     return Response(
@@ -30,7 +30,7 @@ String addParameters(String url, Map<String, String> params) {
 }
 
 Future<Response> getRequest(
-    {String url, Map<String, String> headers = const {}, auth = true}) async {
+    {required String url, Map<String, String> headers = const {}, auth = true}) async {
   Map<String, String> _headers = {};
   _headers.addAll(headers);
 
@@ -42,7 +42,7 @@ Future<Response> getRequest(
 }
 
 Future<Response> postRequest(
-    {String url,
+    {required String url,
     Map<String, String> headers = const {},
     Map<String, String> body = const {},
     auth = true}) async {

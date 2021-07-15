@@ -21,7 +21,7 @@ class Storage {
   List<dynamic> objects = [];
 
   Storage({
-    this.sourceUrl,
+    required this.sourceUrl,
     this.lastPosition = LAST_POSITION,
     this.loadMoreNumber = LOAD_MORE_NUMBER,
     this.isLoading = IS_LOADING,

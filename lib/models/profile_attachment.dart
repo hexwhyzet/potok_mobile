@@ -6,8 +6,8 @@ class ProfileAttachment {
   final String url;
 
   ProfileAttachment({
-    this.tag,
-    this.url,
+    required this.tag,
+    required this.url,
   });
 
   factory ProfileAttachment.fromJson(Map<String, dynamic> json) {

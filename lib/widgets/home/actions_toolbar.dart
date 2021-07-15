@@ -31,10 +31,10 @@ class ActionsToolbar extends StatefulWidget {
   final Tracker tracker;
 
   ActionsToolbar({
-    this.picture,
+    required this.picture,
     this.bottomPadding = 0,
     this.showProfile = true,
-    this.tracker,
+    required this.tracker,
   });
 
   @override
@@ -59,7 +59,7 @@ class _ActionsToolbarState extends State<ActionsToolbar> {
             padding: EdgeInsets.fromLTRB(0, 80, 0, 10),
             child: GestureDetector(
               onDoubleTap: () {
-                likeGlobalKey.currentState.doubleTap();
+                likeGlobalKey.currentState!.doubleTap();
               },
               child: Container(
                 color: Colors.white.withOpacity(0),
@@ -112,9 +112,9 @@ class _ActionsToolbarState extends State<ActionsToolbar> {
 
 class TapAnimation extends StatelessWidget {
   Widget child;
-  final AnimatorKey animatorKey;
+  final AnimatorKey<double> animatorKey;
 
-  TapAnimation({this.child, this.animatorKey});
+  TapAnimation({required this.child, required this.animatorKey});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +148,7 @@ class TapAnimation extends StatelessWidget {
 class PictureDescription extends StatelessWidget {
   final Picture picture;
 
-  PictureDescription({this.picture});
+  PictureDescription({required this.picture});
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +203,7 @@ class ProfilePicture extends StatefulWidget {
   final Profile profile;
   final bool showProfile;
 
-  ProfilePicture({@required this.profile, this.showProfile = true});
+  ProfilePicture({required this.profile, this.showProfile = true});
 
   @override
   _ProfilePicture createState() => _ProfilePicture();
@@ -211,7 +211,7 @@ class ProfilePicture extends StatefulWidget {
 
 class _ProfilePicture extends State<ProfilePicture> {
   bool isSubscribed = false;
-  AnimatorKey<double> animatorKey;
+  late AnimatorKey<double> animatorKey;
   bool isTouched = true;
   bool isUnTouched = true;
 
@@ -272,64 +272,66 @@ class _ProfilePicture extends State<ProfilePicture> {
               }
             },
           ),
-          if (!widget.profile.isYours) GestureDetector(
-            onTap: () {
-              if (!isSubscribed) {
-                if (!globals.isLogged) {
-                  showAuthenticationScreen(context);
-                  return;
-                }
-                getRequest(url: widget.profile.subscribeUrl).then((data) {
-                  if (data.status == 200) {
-                    setState(() {
-                      this.isSubscribed = true;
-                      globals.cacher.updateSub(widget.profile.id, true);
-                    });
-                  } else {
-                    errorFlushbar("Failed to subscribe")..show(context);
+          if (!widget.profile.isYours)
+            GestureDetector(
+              onTap: () {
+                if (!isSubscribed) {
+                  if (!globals.isLogged) {
+                    showAuthenticationScreen(context);
+                    return;
                   }
-                });
-                animatorKey.triggerAnimation();
-                isUnTouched = false;
-              }
-            },
-            child: Animator<double>(
-              resetAnimationOnRebuild: false,
-              animatorKey: animatorKey,
-              tween: Tween<double>(begin: 1, end: 0),
-              repeats: 1,
-              duration: Duration(milliseconds: 200),
-              curve: Curves.linear,
-              builder: (context, animatorState, child) {
-
-                return Container(
-                  margin: EdgeInsets.only(top: 40),
-                  child: Transform.rotate(
-                    angle: animatorState.value * pi,
-                    child: Transform.scale(
-                      scale: isUnTouched ? (isSubscribed ? 0 : 1) : scaleCurve(animatorState.value),
-                      child: Container(
-                        alignment: Alignment.center,
+                  getRequest(url: widget.profile.subscribeUrl).then((data) {
+                    if (data.status == 200) {
+                      setState(() {
+                        this.isSubscribed = true;
+                        globals.cacher.updateSub(widget.profile.id, true);
+                      });
+                    } else {
+                      errorFlushbar("Failed to subscribe")..show(context);
+                    }
+                  });
+                  animatorKey.triggerAnimation();
+                  isUnTouched = false;
+                }
+              },
+              child: Animator<double>(
+                resetAnimationOnRebuild: false,
+                animatorKey: animatorKey,
+                tween: Tween<double>(begin: 1, end: 0),
+                repeats: 1,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.linear,
+                builder: (context, animatorState, child) {
+                  return Container(
+                    margin: EdgeInsets.only(top: 40),
+                    child: Transform.rotate(
+                      angle: animatorState.value * pi,
+                      child: Transform.scale(
+                        scale: isUnTouched
+                            ? (isSubscribed ? 0 : 1)
+                            : scaleCurve(animatorState.value),
                         child: Container(
-                          width: 21,
-                          height: 21,
-                          decoration: BoxDecoration(
-                            color: theme.colors.pictureViewerSubscribeBubble,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.add_rounded,
-                            size: 18,
-                            color: theme.colors.pictureViewerCross,
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 21,
+                            height: 21,
+                            decoration: BoxDecoration(
+                              color: theme.colors.pictureViewerSubscribeBubble,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.add_rounded,
+                              size: 18,
+                              color: theme.colors.pictureViewerCross,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -338,11 +340,11 @@ class _ProfilePicture extends State<ProfilePicture> {
 
 class LikeButton extends StatefulWidget {
   final Picture picture;
-  final Tracker tracker;
+  final Tracker? tracker;
 
   LikeButton({
-    Key key,
-    this.picture,
+    Key? key,
+    required this.picture,
     this.tracker,
   }) : super(key: key);
 
@@ -351,9 +353,9 @@ class LikeButton extends StatefulWidget {
 }
 
 class _LikeButton extends State<LikeButton> {
-  bool isLiked;
+  late bool isLiked;
   bool isUnTouched = true;
-  AnimatorKey<double> animatorKey;
+  late AnimatorKey<double> animatorKey;
 
   @override
   void initState() {
@@ -379,7 +381,7 @@ class _LikeButton extends State<LikeButton> {
       this.isLiked = !isLiked;
       globals.cacher.updateLike(widget.picture.id, this.isLiked);
       if (widget.tracker != null) {
-        widget.tracker.updateLike(this.isLiked);
+        widget.tracker!.updateLike(this.isLiked);
       }
       animatorKey.triggerAnimation();
     });
@@ -437,7 +439,7 @@ class CommentButton extends StatelessWidget {
   Function actionsToolbarUpdater;
   AnimatorKey<double> animatorKey = AnimatorKey<double>();
 
-  CommentButton({this.picture, this.actionsToolbarUpdater});
+  CommentButton({required this.picture, required this.actionsToolbarUpdater});
 
   @override
   Widget build(BuildContext context) {
@@ -469,15 +471,15 @@ class CommentSection extends StatefulWidget {
   Picture picture;
   Function actionsToolbarUpdater;
 
-  CommentSection({this.picture, this.actionsToolbarUpdater});
+  CommentSection({required this.picture, required this.actionsToolbarUpdater});
 
   @override
   _CommentSectionState createState() => _CommentSectionState();
 }
 
 class _CommentSectionState extends State<CommentSection> {
-  Storage commentsStorage;
-  ScrollController scrollController;
+  late Storage commentsStorage;
+  late ScrollController scrollController;
 
   void updateComments() {
     widget.picture.commentsNum += 1;
@@ -699,14 +701,15 @@ class _CommentSectionState extends State<CommentSection> {
                 style: theme.texts.emptyCommentSection,
               ),
             ),
-            if (Random().nextInt(100) > 99)Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: 150,
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Image(image: AssetImage('assets/images/waiting.png')),
-              ),
-            )
+            if (Random().nextInt(100) > 99)
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 150,
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Image(image: AssetImage('assets/images/waiting.png')),
+                ),
+              )
           ],
         );
       }
@@ -777,9 +780,8 @@ class _CommentSectionState extends State<CommentSection> {
                             height: 24,
                             width: 24,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(12)
-                            ),
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(12)),
                             child: IconTheme(
                               data: IconThemeData(
                                 color: Colors.black,
@@ -815,17 +817,17 @@ class _CommentSectionState extends State<CommentSection> {
 
 class AddComment extends StatefulWidget {
   final Function addCommentUrlProvider;
-  final Function updateComments;
+  final Function? updateComments;
   final Color staticCommentSectionColor;
   final TextStyle staticCommentSectionTextStyle;
   final TextStyle dynamicCommentSectionTextStyle;
 
   AddComment(
-      {this.addCommentUrlProvider,
+      {required this.addCommentUrlProvider,
       this.updateComments,
-      this.staticCommentSectionColor,
-      this.staticCommentSectionTextStyle,
-      this.dynamicCommentSectionTextStyle});
+      required this.staticCommentSectionColor,
+      required this.staticCommentSectionTextStyle,
+      required this.dynamicCommentSectionTextStyle});
 
   @override
   _AddCommentState createState() => _AddCommentState();
@@ -845,7 +847,7 @@ class _AddCommentState extends State<AddComment> {
     );
     if (response.status == 200) {
       textController.clear();
-      if (widget.updateComments != null) widget.updateComments();
+      if (widget.updateComments != null) widget.updateComments!();
       Navigator.of(context).pop();
     } else {
       errorFlushbar("Failed to comment")..show(context);
@@ -922,11 +924,11 @@ class _AddCommentState extends State<AddComment> {
 
 class ShareButton extends StatelessWidget {
   final Picture picture;
-  final Tracker tracker;
+  final Tracker? tracker;
 
   AnimatorKey<double> animatorKey = AnimatorKey<double>();
 
-  ShareButton({this.picture, this.tracker});
+  ShareButton({required this.picture, this.tracker});
 
   @override
   Widget build(BuildContext context) {
@@ -938,7 +940,7 @@ class ShareButton extends StatelessWidget {
             Clipboard.setData(
                 new ClipboardData(text: response.jsonContent["share_url"]));
             if (tracker != null) {
-              tracker.updateShare();
+              tracker!.updateShare();
             }
             successFlushbar("Share link copied")..show(context);
           } else {
@@ -963,7 +965,7 @@ class MoreButton extends StatelessWidget {
 
   AnimatorKey<double> animatorKey = AnimatorKey<double>();
 
-  MoreButton({this.picture});
+  MoreButton({required this.picture});
 
   @override
   Widget build(BuildContext context) {
@@ -1042,7 +1044,7 @@ Widget getMoreIcon() {
 }
 
 Widget _getSocialAction({
-  String title,
+  required String title,
   icon,
   bool isShare = false,
   bool isLike = false,

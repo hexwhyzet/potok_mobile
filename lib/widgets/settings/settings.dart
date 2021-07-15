@@ -31,7 +31,7 @@ Widget header(String text) {
   );
 }
 
-Widget tile(String text, Function function) {
+Widget tile(String text, GestureTapCallback function) {
   return GestureDetector(
     onTap: function,
     child: Container(
@@ -93,7 +93,7 @@ class AppSettingsPage extends StatelessWidget {
 class ProfileSettingsPage extends StatefulWidget {
   Profile profile;
 
-  ProfileSettingsPage({this.profile});
+  ProfileSettingsPage({required this.profile});
 
   @override
   _ProfileSettingsPageState createState() => _ProfileSettingsPageState();
@@ -103,9 +103,9 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   final textController = TextEditingController();
   final cropKey = GlobalKey<CropState>();
 
-  File picture;
+  File? picture;
 
-  FilePickerResult result;
+  FilePickerResult? result;
 
   void reloadProfile() async {
     getRequest(url: widget.profile.reloadUrl).then((response) {
@@ -259,14 +259,14 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     );
     setState(() {
       if (result != null) {
-        picture = File(result.files.single.path);
+        picture = File(result!.files.single.path!);
       }
     });
   }
 
   Future<void> cropImage() async {
-    final scale = cropKey.currentState.scale;
-    final area = cropKey.currentState.area;
+    final scale = cropKey.currentState!.scale;
+    final area = cropKey.currentState!.area;
     if (area == null) {
       // cannot crop, widget is not setup
       return;
@@ -275,7 +275,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     // scale up to use maximum possible number of pixels
     // this will sample image in higher resolution to make cropped image larger
     final sample = await ImageCrop.sampleImage(
-      file: picture,
+      file: picture!,
       preferredSize: (2000 / scale).round(),
     );
 
@@ -290,12 +290,12 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   }
 
   Future<Response> sendPicture() async {
-    String base64Picture = base64Encode(picture.readAsBytesSync());
+    String base64Picture = base64Encode(picture!.readAsBytesSync());
     final Response response = await postRequest(
       url: config.uploadAvatarUrl,
       body: {
         "avatar": base64Picture,
-        "extension": picture.path.split(".").last,
+        "extension": picture!.path.split(".").last,
       },
     );
     return response;
@@ -309,7 +309,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
       context,
       createRoute(
         CropPage(
-          file: picture,
+          file: picture!,
         ),
       ),
     ).then((result) {
@@ -497,7 +497,7 @@ Widget get filledCheckBox {
 
 class ChangeProfilePublicity extends StatefulWidget {
   final profile;
-  Function reloadProfile;
+  Function? reloadProfile;
   bool likedPictures;
 
   ChangeProfilePublicity(
@@ -508,7 +508,7 @@ class ChangeProfilePublicity extends StatefulWidget {
 }
 
 class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
-  bool isPublic;
+  late bool isPublic;
 
   @override
   void initState() {
@@ -620,7 +620,9 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
                                   (isPublic ? "1" : "0"))
                           .then((response) {
                         if (response.status == 200) {
-                          widget.reloadProfile();
+                          if (widget.reloadProfile != null) {
+                            widget.reloadProfile!();
+                          }
                           Navigator.of(context).pop();
                           successFlushbar("Publicity is changed")
                             ..show(context);
@@ -657,7 +659,7 @@ class _ChangeProfilePublicityState extends State<ChangeProfilePublicity> {
 class CropPage extends StatefulWidget {
   File file;
 
-  CropPage({this.file});
+  CropPage({required this.file});
 
   @override
   _CropPageState createState() => new _CropPageState();
@@ -723,8 +725,8 @@ class _CropPageState extends State<CropPage> {
   }
 
   Future<void> _cropImage() async {
-    final scale = cropKey.currentState.scale;
-    final area = cropKey.currentState.area;
+    final scale = cropKey.currentState!.scale;
+    final area = cropKey.currentState!.area;
     if (area == null) {
       return;
     }

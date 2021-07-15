@@ -53,7 +53,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 class LoginScreen extends StatefulWidget {
   Function goToRegistrationScreen;
 
-  LoginScreen({this.goToRegistrationScreen});
+  LoginScreen({required this.goToRegistrationScreen});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
 class RegistrationScreen extends StatefulWidget {
   Function goToLoginScreen;
 
-  RegistrationScreen({this.goToLoginScreen});
+  RegistrationScreen({required this.goToLoginScreen});
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -386,7 +386,7 @@ class EmailVerificationScreen extends StatefulWidget {
   String email;
   String password;
 
-  EmailVerificationScreen({this.email, this.password});
+  EmailVerificationScreen({required this.email, required this.password});
 
   @override
   _EmailVerificationScreenState createState() =>

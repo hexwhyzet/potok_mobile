@@ -19,7 +19,6 @@ import 'package:potok/widgets/common/navigator_push.dart';
 import 'package:potok/widgets/home/picture_viewer.dart';
 import 'package:potok/widgets/registration/registration.dart';
 import 'package:potok/widgets/settings/settings.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MyProfileScreen extends StatefulWidget {
   @override
@@ -39,7 +38,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ProfileScreen(
-              profile: Profile.fromJson(snapshot.data.jsonContent),
+              profile: Profile.fromJson(snapshot.data!.jsonContent),
               reloadProfile: reloadProfile,
             );
           } else {
@@ -60,9 +59,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
 class ProfileScreen extends StatefulWidget {
   Profile profile;
-  Function reloadProfile;
+  Function? reloadProfile;
 
-  ProfileScreen({@required this.profile, this.reloadProfile});
+  ProfileScreen({required this.profile, this.reloadProfile});
 
   @override
   _ProfileScreen createState() => _ProfileScreen();
@@ -77,8 +76,8 @@ class _ProfileScreen extends State<ProfileScreen>
 
   GlobalKey<_PicturesGridState> globalKey1 = GlobalKey();
   GlobalKey<_PicturesGridState> globalKey2 = GlobalKey();
-  bool isSubscribed;
-  TabController _tabController;
+  late bool isSubscribed;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -118,7 +117,9 @@ class _ProfileScreen extends State<ProfileScreen>
             ),
           ),
         ).whenComplete(() {
-          widget.reloadProfile();
+          if (widget.reloadProfile != null) {
+            widget.reloadProfile!();
+          }
         })
       },
       style: TextButton.styleFrom(
@@ -160,9 +161,7 @@ class _ProfileScreen extends State<ProfileScreen>
         });
       },
       style: TextButton.styleFrom(
-        primary: this.isSubscribed
-            ? Colors.transparent
-            : Colors.white,
+        primary: this.isSubscribed ? Colors.transparent : Colors.white,
         // splashFactory: NoSplash.splashFactory,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         padding: EdgeInsets.all(0),
@@ -190,7 +189,8 @@ class _ProfileScreen extends State<ProfileScreen>
     );
   }
 
-  Widget singleAttachmentButton(String text, Color textColor, Color backColor, String url) {
+  Widget singleAttachmentButton(
+      String text, Color textColor, Color backColor, String url) {
     return Padding(
       padding: EdgeInsets.only(left: 5),
       child: TextButton(
@@ -217,21 +217,20 @@ class _ProfileScreen extends State<ProfileScreen>
     );
   }
 
-  Widget VkSingleAttachmentButton (String url) {
-    return singleAttachmentButton("VK", Colors.white, theme.colors.secondaryColor, url);
+  Widget VkSingleAttachmentButton(String url) {
+    return singleAttachmentButton(
+        "VK", Colors.white, theme.colors.secondaryColor, url);
   }
 
-
   Widget getAttachmentsButton() {
-    switch(widget.profile.attachments.length) {
-      case 0:
-        return Container();
+    switch (widget.profile.attachments.length) {
       case 1:
         ProfileAttachment attachment = widget.profile.attachments[0];
         if (attachment.tag.toLowerCase() == "vk") {
           return VkSingleAttachmentButton(attachment.url);
         }
     }
+    return Container();
   }
 
   Widget getBlockText() {
@@ -331,7 +330,7 @@ class _ProfileScreen extends State<ProfileScreen>
     );
   }
 
-  Widget profileAppBar() {
+  PreferredSizeWidget profileAppBar() {
     final bool canPop = ModalRoute.of(context)?.canPop ?? false;
     if (canPop) {
       return AppBar(
@@ -584,7 +583,11 @@ class PicturesGrid extends StatefulWidget {
   final int profileId;
   final Profile profile;
 
-  PicturesGrid({Key key, this.baseUrl, this.profileId, this.profile})
+  PicturesGrid(
+      {Key? key,
+      required this.baseUrl,
+      required this.profileId,
+      required this.profile})
       : super(key: key);
 
   @override
@@ -593,7 +596,7 @@ class PicturesGrid extends StatefulWidget {
 
 class _PicturesGridState extends State<PicturesGrid>
     with AutomaticKeepAliveClientMixin {
-  Storage storage;
+  late Storage storage;
 
   @override
   bool get wantKeepAlive => true;

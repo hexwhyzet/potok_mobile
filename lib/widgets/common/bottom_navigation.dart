@@ -29,7 +29,7 @@ class _AppScreenState extends State<AppScreen> {
   final AnimatorKey<double> inboxAnimatorKey = AnimatorKey<double>();
   final AnimatorKey<double> profileAnimatorKey = AnimatorKey<double>();
 
-  List<AnimatorKey<double>> animatorKeys;
+  late List<AnimatorKey<double>> animatorKeys;
 
   void _onItemTapped(int index) {
     [

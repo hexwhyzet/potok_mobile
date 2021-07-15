@@ -10,8 +10,8 @@ class StyledAnimatedOpacity extends StatelessWidget {
   final bool visible;
 
   StyledAnimatedOpacity({
-    this.child,
-    this.visible,
+    required this.child,
+    required this.visible,
   });
 
   @override
@@ -29,7 +29,7 @@ class StyledFadeInImageNetwork extends StatelessWidget {
   final BoxFit fit;
 
   StyledFadeInImageNetwork({
-    @required this.image,
+    required this.image,
     this.fit = BoxFit.contain,
   });
 

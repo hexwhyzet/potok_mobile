@@ -24,9 +24,9 @@ class UploadPictureScreen extends StatefulWidget {
 class _UploadPictureScreenState extends State<UploadPictureScreen> {
   PreloadPageController controller = PreloadPageController(initialPage: 0);
 
-  File _picture;
+  late File? _picture;
 
-  FilePickerResult result;
+  late FilePickerResult? result;
 
   TextEditingController linkController = TextEditingController();
 
@@ -46,23 +46,23 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
   }
 
   Future picFromGallery() async {
-    this.result = await FilePicker.platform.pickFiles(
+    this.result = (await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowCompression: true,
-    );
+    ))!;
     setState(() {
       if (result != null) {
-        _picture = File(result.files.single.path);
+        _picture = File(result!.files.single.path!);
       }
     });
   }
 
   Future<Response> sendPicture() async {
-    String base64Picture = base64Encode(_picture.readAsBytesSync());
+    String base64Picture = base64Encode(_picture!.readAsBytesSync());
     final Response response =
         await postRequest(url: config.uploadPictureUrl, body: {
       "picture": base64Picture,
-      "extension": _picture.path.split(".").last,
+      "extension": _picture!.path.split(".").last,
       "link": linkController.text.trim(),
     });
     return response;
@@ -212,7 +212,7 @@ class _UploadPictureScreenState extends State<UploadPictureScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(15),
                                   child:
-                                      Image.file(_picture, fit: BoxFit.contain),
+                                      Image.file(_picture!, fit: BoxFit.contain),
                                 ),
                               ),
                             ),

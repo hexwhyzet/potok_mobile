@@ -4,7 +4,7 @@ class Cacher {
 
   bool checkLike(int id, bool val) {
     if (likeCache.containsKey(id)) {
-      return likeCache[id];
+      return likeCache[id]!;
     } else {
       return val;
     }
@@ -12,7 +12,7 @@ class Cacher {
 
   bool checkSub(int id, bool val) {
     if (subCache.containsKey(id)) {
-      return subCache[id];
+      return subCache[id]!;
     } else {
       return val;
     }

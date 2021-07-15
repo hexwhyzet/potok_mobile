@@ -1,8 +1,8 @@
 import 'package:potok/models/storage.dart';
 
 class HomeManager {
-  PictureViewerStorage subscriptionStorage;
-  PictureViewerStorage feedStorage;
+  late PictureViewerStorage subscriptionStorage;
+  late PictureViewerStorage feedStorage;
 
   HomeManager(subscriptionUrl, feedUrl) {
     subscriptionStorage = PictureViewerStorage(sourceUrl: subscriptionUrl);

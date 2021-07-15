@@ -17,6 +17,7 @@ String get unitId {
   } else if (Platform.isIOS) {
     return config.adsIosUnitId;
   }
+  throw Exception("This platform has no unit id");
 }
 
 class AdsWidget extends StatefulWidget {
@@ -25,7 +26,7 @@ class AdsWidget extends StatefulWidget {
 }
 
 class _AdsWidgetState extends State<AdsWidget> {
-  NativeAd myNative;
+  late NativeAd myNative;
   bool isAdLoaded = false;
 
   @override

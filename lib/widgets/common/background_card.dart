@@ -8,7 +8,7 @@ class BackgroundCard extends StatelessWidget {
 
   final BorderRadius borderRadius = BorderRadius.circular(20);
 
-  BackgroundCard({this.child, this.padding = const EdgeInsets.all(0)});
+  BackgroundCard({required this.child, this.padding = const EdgeInsets.all(0)});
 
   @override
   Widget build(BuildContext context) {

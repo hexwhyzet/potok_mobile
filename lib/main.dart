@@ -36,12 +36,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         builder: (context, child) {
           return ScrollConfiguration(
             behavior: AntiGlowingOverscrollIndicator(),
-            child: child,
+            child: child!,
           );
         },
         theme: ThemeData(

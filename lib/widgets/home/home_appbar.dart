@@ -91,8 +91,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
 class CustomTabIndicator extends Decoration {
 
   @override
-  _CustomPainter createBoxPainter([VoidCallback onChanged]) {
-    return new _CustomPainter(this, onChanged);
+  _CustomPainter createBoxPainter([VoidCallback? onChanged]) {
+    return new _CustomPainter(this, onChanged!);
   }
 
 }
@@ -112,7 +112,7 @@ class _CustomPainter extends BoxPainter {
 
     //offset is the position from where the decoration should be drawn.
     //configuration.size tells us about the height and width of the tab.
-    final Rect rect = Offset(offset.dx + configuration.size.width / 4, offset.dy) & Size(configuration.size.width / 2, 4);
+    final Rect rect = Offset(offset.dx + configuration.size!.width / 4, offset.dy) & Size(configuration.size!.width / 2, 4);
     final Paint paint = Paint();
     paint.color = theme.colors.secondaryColor.withOpacity(0.95);
     paint.style = PaintingStyle.fill;

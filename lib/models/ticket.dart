@@ -19,10 +19,10 @@ class Ticket {
   bool isShared = false;
 
   Ticket({
-    this.id,
-    this.token,
-    this.picture,
-    this.profile,
+    required this.id,
+    required this.token,
+    required this.picture,
+    required this.profile,
   });
 
   factory Ticket.fromJson(Map<String, dynamic> json) {

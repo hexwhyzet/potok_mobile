@@ -17,18 +17,18 @@ class Comment {
   final bool canBeDeleted;
 
   Comment({
-    this.type,
-    this.id,
-    this.profile,
-    this.picture,
-    this.text,
-    this.likeUrl,
-    this.likesNum,
-    this.date,
-    this.isLiked,
-    this.isLikedByCreator,
-    this.deleteUrl,
-    this.canBeDeleted,
+    required this.type,
+    required this.id,
+    required this.profile,
+    required this.picture,
+    required this.text,
+    required this.likeUrl,
+    required this.likesNum,
+    required this.date,
+    required this.isLiked,
+    required this.isLikedByCreator,
+    required this.deleteUrl,
+    required this.canBeDeleted,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {

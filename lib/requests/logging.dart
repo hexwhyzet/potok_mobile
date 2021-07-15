@@ -19,7 +19,7 @@ Future<bool> doesTokenExist() async {
 
 Future<String> getToken() async {
   final storage = new FlutterSecureStorage();
-  return await storage.read(key: TOKEN_KEY);
+  return (await storage.read(key: TOKEN_KEY))!;
 }
 
 Future<void> writeToken(String token) async {
@@ -33,7 +33,7 @@ Future<void> deleteToken() async {
 }
 
 Future<String> getDeviceId() async {
-  String deviceId = await PlatformDeviceId.getDeviceId;
+  String deviceId = (await PlatformDeviceId.getDeviceId)!;
   return deviceId;
 }
 

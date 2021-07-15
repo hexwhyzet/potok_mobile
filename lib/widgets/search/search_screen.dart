@@ -63,7 +63,7 @@ class _SearchScreen extends State<SearchScreen> {
 class ProfileTile extends StatelessWidget {
   final Profile profile;
 
-  ProfileTile({this.profile});
+  ProfileTile({required this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +188,7 @@ class DataSearch extends SearchDelegate<String> {
       future: requestResultList(query),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<dynamic> content = objectsFromJson(snapshot.data.jsonContent);
+          List<dynamic> content = objectsFromJson(snapshot.data!.jsonContent);
           return ListView.builder(
             itemBuilder: (context, index) {
               Profile profile = content[index];
@@ -215,7 +215,7 @@ class DataSearch extends SearchDelegate<String> {
           content = recent;
         } else {
           if (snapshot.hasData) {
-            content = objectsFromJson(snapshot.data.jsonContent)
+            content = objectsFromJson(snapshot.data!.jsonContent)
                 .map((element) => element.screenName.toString())
                 .toList();
           } else {
@@ -261,9 +261,9 @@ class TrendingProfiles extends StatefulWidget {
 }
 
 class _TrendingProfilesState extends State<TrendingProfiles> {
-  Storage storage;
+  late Storage storage;
 
-  ScrollController scrollController;
+  late ScrollController scrollController;
 
   @override
   void initState() {

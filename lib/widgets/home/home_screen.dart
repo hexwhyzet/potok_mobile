@@ -14,10 +14,10 @@ class HomeScreen extends StatefulWidget {
   final TrackerManager trackerManager;
 
   HomeScreen(
-      {@required this.subscriptionStorage,
-      @required this.feedStorage,
-      @required this.setStateBottomBar,
-      this.trackerManager});
+      {required this.subscriptionStorage,
+      required this.feedStorage,
+      required this.setStateBottomBar,
+      required this.trackerManager});
 
   @override
   _HomeScreen createState() => _HomeScreen();
@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreen extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   GlobalKey<PictureViewerState> subscriptionKey =
       GlobalKey<PictureViewerState>();
   GlobalKey<PictureViewerState> feedKey = GlobalKey<PictureViewerState>();
@@ -34,7 +34,9 @@ class _HomeScreen extends State<HomeScreen>
   void initState() {
     super.initState();
     _tabController = TabController(
-        initialIndex: globals.isLogged ? globals.homeScreenTabIndex : 1, length: 2, vsync: this);
+        initialIndex: globals.isLogged ? globals.homeScreenTabIndex : 1,
+        length: 2,
+        vsync: this);
   }
 
   @override
@@ -47,7 +49,7 @@ class _HomeScreen extends State<HomeScreen>
   void rebuildSubscription() {
     widget.subscriptionStorage.rebuild().then((_) {
       setState(() {
-        subscriptionKey.currentState.controller.jumpTo(1);
+        subscriptionKey.currentState!.controller.jumpTo(1);
       });
     });
   }
@@ -56,7 +58,7 @@ class _HomeScreen extends State<HomeScreen>
     globals.trackerManager.sendBack(threshold: 0).then((value) {
       widget.feedStorage.rebuild().then((_) {
         setState(() {
-          feedKey.currentState.controller.jumpTo(1);
+          feedKey.currentState!.controller.jumpTo(1);
         });
       });
     });

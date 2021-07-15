@@ -9,10 +9,10 @@ class Like {
   final int date;
 
   Like({
-    this.type,
-    this.profile,
-    this.picture,
-    this.date,
+    required this.type,
+    required this.profile,
+    required this.picture,
+    required this.date,
   });
 
   factory Like.fromJson(Map<String, dynamic> json) {
@@ -35,9 +35,9 @@ class Subscription {
   final int date;
 
   Subscription({
-    this.type,
-    this.profile,
-    this.date,
+    required this.type,
+    required this.profile,
+    required this.date,
   });
 
   factory Subscription.fromJson(Map<String, dynamic> json) {

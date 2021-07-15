@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +19,11 @@ class ActionsScreen extends StatefulWidget {
 
 class _ActionsScreenState extends State<ActionsScreen>
     with AutomaticKeepAliveClientMixin<ActionsScreen> {
-  Storage storage;
+  late Storage storage;
 
   bool get wantKeepAlive => true;
 
-  ScrollController scrollController;
+  late ScrollController scrollController;
 
   @override
   void initState() {
@@ -40,14 +38,15 @@ class _ActionsScreenState extends State<ActionsScreen>
     });
     this.scrollController = ScrollController();
     this.scrollController.addListener(() {
-      if (storage.hasMore && !storage.isLoading &&
+      if (storage.hasMore &&
+          !storage.isLoading &&
           scrollController.position.extentAfter < 100) {
         storage.addObjects().then((value) => setState(() {}));
       }
     });
   }
 
-  Widget loadingScreen({Widget child}) {
+  Widget loadingScreen({required Widget child}) {
     if (storage.size() == 0 && storage.isLoading == true) {
       return Center(
         child: StyledLoadingIndicator(
@@ -79,7 +78,7 @@ class _ActionsScreenState extends State<ActionsScreen>
           child: ListView.builder(
             controller: scrollController,
             physics:
-            BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             itemCount: storage.size(),
             itemBuilder: (context, position) {
               dynamic action = storage.getObject(position);
@@ -113,8 +112,7 @@ class _ActionsScreenState extends State<ActionsScreen>
                                 TextSpan(
                                   text: profile.screenName,
                                   recognizer: new TapGestureRecognizer()
-                                    ..onTap = () =>
-                                        Navigator.push(
+                                    ..onTap = () => Navigator.push(
                                           context,
                                           createRoute(
                                             ProfileScreen(
@@ -126,15 +124,15 @@ class _ActionsScreenState extends State<ActionsScreen>
                                 TextSpan(
                                   text: " liked your picture.",
                                   style:
-                                  TextStyle(fontWeight: FontWeight.normal),
+                                      TextStyle(fontWeight: FontWeight.normal),
                                 ),
                                 TextSpan(
-                                  text: "  " + shortenTimeDelta(
-                                    DateTime
-                                        .now()
-                                        .millisecondsSinceEpoch ~/ 1000 -
-                                        action.date,
-                                  ),
+                                  text: "  " +
+                                      shortenTimeDelta(
+                                        DateTime.now().millisecondsSinceEpoch ~/
+                                                1000 -
+                                            int.tryParse(action.date)!,
+                                      ),
                                   style: theme.texts.activityTime,
                                 ),
                               ],
@@ -153,8 +151,7 @@ class _ActionsScreenState extends State<ActionsScreen>
                                 TextSpan(
                                   text: profile.screenName,
                                   recognizer: new TapGestureRecognizer()
-                                    ..onTap = () =>
-                                        Navigator.push(
+                                    ..onTap = () => Navigator.push(
                                           context,
                                           createRoute(
                                             ProfileScreen(
@@ -166,15 +163,15 @@ class _ActionsScreenState extends State<ActionsScreen>
                                 TextSpan(
                                   text: " subscribed to you.",
                                   style:
-                                  TextStyle(fontWeight: FontWeight.normal),
+                                      TextStyle(fontWeight: FontWeight.normal),
                                 ),
                                 TextSpan(
-                                  text: "  " + shortenTimeDelta(
-                                    DateTime
-                                        .now()
-                                        .millisecondsSinceEpoch ~/ 1000 -
-                                        action.date,
-                                  ),
+                                  text: "  " +
+                                      shortenTimeDelta(
+                                        DateTime.now().millisecondsSinceEpoch ~/
+                                                1000 -
+                                            int.tryParse(action.date)!,
+                                      ),
                                   style: theme.texts.activityTime,
                                 ),
                               ],

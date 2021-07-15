@@ -13,17 +13,17 @@ bool isLogged = false;
 
 int homeScreenTabIndex = 1;
 
-String sessionToken;
+late String sessionToken;
 
-String authToken;
+late String authToken;
 
-PictureViewerStorage subscriptionStorage;
+late PictureViewerStorage subscriptionStorage;
 
-TicketStorage feedStorage;
+late TicketStorage feedStorage;
 
-TrackerManager trackerManager;
+late TrackerManager trackerManager;
 
-Cacher cacher;
+late Cacher cacher;
 
 final darkTheme = DarkTheme();
 

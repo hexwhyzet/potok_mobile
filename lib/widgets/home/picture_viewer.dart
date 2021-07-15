@@ -19,7 +19,8 @@ class PictureViewerScreen extends StatefulWidget {
   final PictureViewerStorage storage;
   final bool showProfileAvatar;
 
-  PictureViewerScreen({Key key, @required this.storage, this.showProfileAvatar})
+  PictureViewerScreen(
+      {Key? key, required this.storage, this.showProfileAvatar = true})
       : super(key: key);
 
   @override
@@ -85,11 +86,11 @@ class PictureViewer extends StatefulWidget {
   final storage;
   final double bottomPadding;
   final bool showProfileAvatar;
-  final TrackerManager trackerManager;
+  final TrackerManager? trackerManager;
 
   PictureViewer(
-      {Key key,
-      @required this.storage,
+      {Key? key,
+      required this.storage,
       this.bottomPadding = 0,
       this.showProfileAvatar = true,
       this.trackerManager})
@@ -100,7 +101,7 @@ class PictureViewer extends StatefulWidget {
 }
 
 class PictureViewerState extends State<PictureViewer> {
-  PreloadPageController controller;
+  late PreloadPageController controller;
 
   Widget get emptyPage {
     return SafeArea(
@@ -159,7 +160,7 @@ class PictureViewerState extends State<PictureViewer> {
             picture: widget.storage.getObject(position).picture,
             bottomPadding: widget.bottomPadding,
             showProfileAvatar: widget.showProfileAvatar,
-            tracker: widget.trackerManager.getTracker(position),
+            tracker: widget.trackerManager!.getTracker(position),
           );
         }
         return RequestedPicture(
@@ -172,8 +173,8 @@ class PictureViewerState extends State<PictureViewer> {
       onPageChanged: (int position) {
         widget.storage.updateLastPosition(position);
         if (widget.trackerManager != null) {
-          widget.trackerManager.updateView(position);
-          widget.trackerManager.sendBack();
+          widget.trackerManager!.updateView(position);
+          widget.trackerManager!.sendBack();
         }
         if (widget.storage.getObject(position) is Picture ||
             widget.storage.getObject(position) is Ticket) {
@@ -228,10 +229,10 @@ class VerticalGradientShadow extends StatelessWidget {
   final Alignment alignment;
 
   VerticalGradientShadow({
-    @required this.height,
-    @required this.alignment,
-    @required this.upperColor,
-    @required this.lowerColor,
+    required this.height,
+    required this.alignment,
+    required this.upperColor,
+    required this.lowerColor,
   });
 
   @override
@@ -261,7 +262,7 @@ class PictureContainer extends StatelessWidget {
   final String pictureUrl;
 
   PictureContainer({
-    @required this.pictureUrl,
+    required this.pictureUrl,
   });
 
   @override
@@ -292,10 +293,10 @@ class RequestedPicture extends StatefulWidget {
   final Picture picture;
   final double bottomPadding;
   final bool showProfileAvatar;
-  final Tracker tracker;
+  final Tracker? tracker;
 
   RequestedPicture({
-    @required this.picture,
+    required this.picture,
     this.bottomPadding = 0,
     this.showProfileAvatar = true,
     this.tracker,
@@ -347,7 +348,7 @@ class _RequestedPicture extends State<RequestedPicture> {
                 picture: widget.picture,
                 bottomPadding: 0,
                 showProfile: widget.showProfileAvatar,
-                tracker: widget.tracker,
+                tracker: widget.tracker!,
               ),
             ),
           ],

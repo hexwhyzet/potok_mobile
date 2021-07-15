@@ -48,7 +48,7 @@ class BottomActionsSheet extends StatelessWidget {
   }
 }
 
-constructListTile(String title, Icon icon, Function onTap) {
+constructListTile(String title, Icon icon, VoidCallback onTap) {
   return Container(
     padding: EdgeInsets.all(5),
     child: ListTile(

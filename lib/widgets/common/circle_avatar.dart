@@ -7,7 +7,7 @@ class CustomCircleAvatar extends StatelessWidget {
   final double radius;
   final Profile profile;
 
-  CustomCircleAvatar({this.profile, this.radius});
+  CustomCircleAvatar({required this.profile, this.radius = 15});
 
   @override
   Widget build(BuildContext context) {

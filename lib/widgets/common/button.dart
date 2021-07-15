@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BlueButton extends StatelessWidget {
-  final Function onPressed;
+  final VoidCallback  onPressed;
 
   final Widget label;
 
@@ -10,7 +10,7 @@ class BlueButton extends StatelessWidget {
 
   final BorderRadius borderRadius = BorderRadius.circular(10);
 
-  BlueButton({this.onPressed, this.label, this.isArrow=false});
+  BlueButton({required this.onPressed, required this.label, this.isArrow=false});
 
   @override
   Widget build(BuildContext context) {

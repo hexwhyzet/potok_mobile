@@ -5,7 +5,7 @@ class TrackerManager {
   int currentIndex = 0;
   Storage ticketStorage;
 
-  TrackerManager({this.ticketStorage});
+  TrackerManager({required this.ticketStorage});
 
   updateView(int index) {
     if (ticketStorage.getObject(index) is Ticket) {
@@ -49,7 +49,7 @@ class TrackerManager {
 class Tracker {
   final Ticket ticket;
 
-  Tracker({this.ticket});
+  Tracker({required this.ticket});
 
   updateShare() {
     ticket.isShared = true;
