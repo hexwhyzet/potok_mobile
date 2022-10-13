@@ -1,0 +1,21 @@
+{
+  "language": "Русский",
+  "homeTabLabel": "Главная",
+  "searchTabLabel": "Поиск",
+  "uploadTabLabel": "Загрузить",
+  "inboxTabLabel": "Входящие",
+  "profileTabLabel": "Профиль",
+  "youBlockedTheUser": "Вы заблокировали пользователя",
+  "theUserBlockedYou": "Пользователь заблокировал вас",
+  "thisAccountIsPrivate": "Этот аккаунт приватный",
+  "youDontHaveAccessToThisProfile": "У вас нету доступа к этому аккаунту",
+  "followers": "Подписчики",
+  "following": "Подписки",
+  "likes": "Лайки",
+  "follow": "Подписаться",
+  "unfollow": "Отписаться",
+  "sendRequest": "Отправить запрос",
+  "cancelRequest": "Отменить запрос",
+  "editProfile": "Изменить профиль",
+  "noPicturesYet": "Картинок нету"
+}

@@ -14,41 +14,46 @@ description: A new approach to viewing pictures.
 version: 0.1.1+5
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
 
   transparent_image: ^2.0.0
-  cupertino_icons: ^1.0.2
-  http: ^0.13.1
+  cupertino_icons: ^1.0.5
+  http: ^0.13.5
   preload_page_view: ^0.1.6
-  image_picker: ^0.7.4
-  file_picker: ^3.0.1
-  platform_device_id: ^1.0.1
-  flutter_launcher_icons: ^0.9.0
+  image_picker: ^0.8.6
+#  file_picker: ^4.0.0
+  flutter_launcher_icons: ^0.10.0
   cupertino_back_gesture: ^0.1.0
-  simple_animations: ^3.0.3
-  url_launcher: ^6.0.3
-  another_flushbar: ^1.10.17
-  flutter_spinkit: ^5.0.0
-  animator: ^3.0.0
+  simple_animations: ^5.0.0+2
+  url_launcher: ^6.1.6
+  another_flushbar: ^1.12.29
+  flutter_spinkit: ^5.1.0
+  animator: ^3.2.0
   image_crop:
     git:
       url: "https://github.com/hexwhyzet/image_crop.git"
-  google_mobile_ads: ^0.12.1+1
-  flutter_secure_storage: ^4.1.0
+  flutter_secure_storage: ^6.0.0
   flutter_phoenix: ^1.0.0
   flutter_verification_code: ^1.0.1
-  bloc: ^7.0.0
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
   equatable: ^2.0.2
+  json_serializable: ^6.5.0
+  dio: ^4.0.0
+  shared_preferences: ^2.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^1.1.7+1
+  flutter_native_splash: ^2.2.10+1
 
 flutter_native_splash:
   color: "#000000"
@@ -70,6 +75,7 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -128,6 +134,6 @@ flutter:
     - family:  TikTokIcons
       fonts:
         - asset: assets/icons/TikTokIcons.ttf
-    - family: Icons
+    - family: AppIcons
       fonts:
-        - asset: assets/icons/Icons.ttf
+        - asset: assets/icons/AppIcons.ttf

@@ -1,0 +1,39 @@
+{
+  "language": "English",
+  "@language": {
+    "@description": "The current Language"
+  },
+  "homeTabLabel": "Home",
+  "@homeTabLabel": {
+    "@description": "Label of the first Tab of BottomNavigationBar"
+  },
+  "searchTabLabel": "Search",
+  "@searchTabLabel": {
+    "@description": "Label of the second Tab of BottomNavigationBar"
+  },
+  "uploadTabLabel": "Upload",
+  "@uploadTabLabel": {
+    "@description": "Label of the third Tab of BottomNavigationBar"
+  },
+  "inboxTabLabel": "Inbox",
+  "@inboxTabLabel": {
+    "@description": "Label of the forth Tab of BottomNavigationBar"
+  },
+  "profileTabLabel": "Profile",
+  "@profileTabLabel": {
+    "@description": "Label of the fifth Tab of BottomNavigationBar"
+  },
+  "youBlockedTheUser": "You blocked the user",
+  "theUserBlockedYou": "The user blocked you",
+  "thisAccountIsPrivate": "This account is private",
+  "youDontHaveAccessToThisProfile": "You dont have access to this profile",
+  "followers": "Followers",
+  "following": "Following",
+  "likes": "Likes",
+  "follow": "Follow",
+  "unfollow": "Unfollow",
+  "sendRequest": "Send Request",
+  "cancelRequest": "Cancel Request",
+  "editProfile": "Edit Profile",
+  "noPicturesYet": "No Pictures Yet"
+}
